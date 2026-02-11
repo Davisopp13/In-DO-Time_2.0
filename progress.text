@@ -1,0 +1,20 @@
+## Iteration 2 - Set up Supabase client, environment variables, database schema migration
+- Installed @supabase/supabase-js and @supabase/ssr packages
+- Created .env.local and .env.example with NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY placeholders
+- Created src/lib/supabase.ts (browser client using createBrowserClient with Database type)
+- Created src/lib/supabase-server.ts (server client using createServerClient with cookie handling)
+- Created src/types/supabase.ts (Database type definitions for all 6 tables: clients, projects, tasks, time_entries, notes, api_keys)
+- Created supabase/migrations/001_initial_schema.sql with full schema including:
+  - All 6 tables with constraints and defaults
+  - All indexes from PRD
+  - updated_at triggers for auto-timestamping
+  - Row Level Security (RLS) policies for authenticated users
+- Files changed: package.json, package-lock.json, .env.local, .env.example, src/lib/supabase.ts, src/lib/supabase-server.ts, src/types/supabase.ts, supabase/migrations/001_initial_schema.sql
+- Learnings for future iterations:
+  - @supabase/ssr is the correct package for Next.js App Router (not @supabase/auth-helpers-nextjs which is deprecated)
+  - Browser client uses createBrowserClient, server uses createServerClient with cookie store
+  - Server client's setAll needs try/catch because it can be called from Server Components where cookies are read-only
+  - Database type generic on createBrowserClient<Database> and createServerClient<Database> provides type-safe queries
+  - .env.local is gitignored by default in Next.js - .env.example serves as documentation
+  - The schema includes updated_at triggers which the PRD didn't explicitly mention but are essential for data integrity
+---

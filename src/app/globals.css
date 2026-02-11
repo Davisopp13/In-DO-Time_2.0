@@ -1,0 +1,190 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root,
+[data-theme="dark"] {
+  /* Dark Mode - "Mountain Night" (default) */
+  --bg-image: url("/mountain-bg.jpg");
+  --bg-overlay: linear-gradient(rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.85));
+  --bg-gradient: var(--bg-overlay), var(--bg-image);
+  --bg-glow-green: radial-gradient(ellipse at 10% 10%, rgba(132, 204, 22, 0.08) 0%, transparent 50%);
+  --bg-glow-blue: radial-gradient(ellipse at 90% 90%, rgba(56, 189, 248, 0.06) 0%, transparent 50%);
+
+  --surface: rgba(255, 255, 255, 0.06);
+  --surface-hover: rgba(255, 255, 255, 0.10);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.15);
+
+  --text-primary: #f3f4f6;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --heading: #ffffff;
+
+  /* Workspace Colors */
+  --workspace-color: #84cc16;
+  --workspace-color-muted: rgba(132, 204, 22, 0.15);
+  --workspace-color-glow: rgba(132, 204, 22, 0.3);
+
+  --accent: var(--workspace-color);
+  --accent-hover: var(--workspace-color);
+  /* We'll use JS to set a brightness filter or just keep it same */
+  --accent-muted: var(--workspace-color-muted);
+  --accent-glow: var(--workspace-color-glow);
+
+  --danger: #f87171;
+  --timer-active: #D97706;
+
+  --scrollbar: rgba(255, 255, 255, 0.1);
+  --progress-track: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="light"] {
+  /* Light Mode - "Mountain Day" */
+  --bg-image: url("/mountain-light-bg.jpg");
+  --bg-overlay: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.85));
+  --bg-gradient: var(--bg-overlay), var(--bg-image);
+  --bg-glow-green: radial-gradient(ellipse at 10% 10%, rgba(101, 163, 13, 0.06) 0%, transparent 50%);
+  --bg-glow-blue: radial-gradient(ellipse at 90% 90%, rgba(56, 189, 248, 0.04) 0%, transparent 50%);
+
+  --surface: rgba(255, 255, 255, 0.75);
+  --surface-hover: rgba(255, 255, 255, 0.9);
+  --border: rgba(0, 0, 0, 0.06);
+  --border-hover: rgba(0, 0, 0, 0.12);
+
+  --text-primary: #374151;
+  --text-secondary: #6b7280;
+  --text-muted: #9ca3af;
+  --heading: #111827;
+
+  --accent: #65a30d;
+  --accent-hover: #84cc16;
+  --accent-muted: rgba(101, 163, 13, 0.12);
+  --accent-glow: rgba(101, 163, 13, 0.2);
+
+  --danger: #ef4444;
+  --timer-active: #D97706;
+
+  --scrollbar: rgba(0, 0, 0, 0.1);
+  --progress-track: rgba(0, 0, 0, 0.06);
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: var(--font-outfit), "Outfit", sans-serif;
+  color: var(--text-primary);
+  line-height: 1.65;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--bg-gradient);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: 100vh;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: var(--bg-glow-green), var(--bg-glow-blue);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar);
+  border-radius: 3px;
+}
+
+/* Glass utility */
+.glass {
+  background: var(--surface);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--border);
+  border-radius: 1.25rem;
+}
+
+.glass:hover {
+  background: var(--surface-hover);
+  border-color: var(--border-hover);
+}
+
+/* Trail Marker */
+.trail-marker {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.trail-marker::before {
+  content: "▲ ";
+}
+
+/* Transitions */
+* {
+  transition-property: background-color, border-color, color, box-shadow, opacity;
+  transition-duration: 200ms;
+  transition-timing-function: ease;
+}
+
+[data-theme] {
+  transition-duration: 500ms;
+}
+
+/* Accent glow animation */
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 8px var(--accent-glow);
+  }
+
+  50% {
+    box-shadow: 0 0 20px var(--accent-glow), 0 0 40px rgba(132, 204, 22, 0.1);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Timer active pulse */
+@keyframes timer-pulse {
+
+  0%,
+  100% {
+    box-shadow: 0 0 8px rgba(217, 119, 6, 0.3);
+  }
+
+  50% {
+    box-shadow: 0 0 20px rgba(217, 119, 6, 0.5), 0 0 40px rgba(217, 119, 6, 0.15);
+  }
+}
+
+.animate-timer-pulse {
+  animation: timer-pulse 2s ease-in-out infinite;
+}
