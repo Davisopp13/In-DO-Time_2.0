@@ -4,31 +4,49 @@ import { redirect } from "next/navigation";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 
 export async function signIn(email: string, password: string) {
-  const supabase = createServerSupabaseClient();
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
+  try {
+    const supabase = createServerSupabaseClient();
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
-  if (error) {
-    throw new Error(error.message);
+    if (error) {
+      console.error("Supabase signIn error:", error);
+      throw new Error(error.message);
+    }
+
+    redirect("/");
+  } catch (error: any) {
+    if (error.digest?.includes("NEXT_REDIRECT")) {
+      throw error;
+    }
+    console.error("Sign in action error:", error);
+    throw error;
   }
-
-  redirect("/");
 }
 
 export async function signUp(email: string, password: string) {
-  const supabase = createServerSupabaseClient();
-  const { error } = await supabase.auth.signUp({
-    email,
-    password,
-  });
+  try {
+    const supabase = createServerSupabaseClient();
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
 
-  if (error) {
-    throw new Error(error.message);
+    if (error) {
+      console.error("Supabase signUp error:", error);
+      throw new Error(error.message);
+    }
+
+    redirect("/");
+  } catch (error: any) {
+    if (error.digest?.includes("NEXT_REDIRECT")) {
+      throw error;
+    }
+    console.error("Sign up action error:", error);
+    throw error;
   }
-
-  redirect("/");
 }
 
 export async function signOut() {
