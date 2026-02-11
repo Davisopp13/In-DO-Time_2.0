@@ -25,10 +25,10 @@ CREATE TRIGGER workspaces_updated_at
 
 -- Seed initial workspaces
 INSERT INTO workspaces (name, slug, color, icon) VALUES
-('Hapag-Lloyd', 'hapag-lloyd', '#fb923c', 'Ship'),
-('DO Code Lab', 'do-code-lab', '#8b5cf6', 'Code'),
+('Hapag-Lloyd', 'hapag-lloyd', '#38bdf8', 'Ship'),
+('DO Code Lab', 'do-code-lab', '#84cc16', 'Code'),
 ('Personal', 'personal', '#10b981', 'User'),
-('DObot Development', 'dobot-development', '#06b6d4', 'Bot');
+('DObot Development', 'dobot-development', '#fb923c', 'Bot');
 
 -- Update Projects table to link to Workspaces
 ALTER TABLE projects ADD COLUMN workspace_id UUID REFERENCES workspaces(id);

@@ -3,10 +3,11 @@
 import { useState, useRef, useEffect } from "react";
 import { X } from "lucide-react";
 import { createClient, updateClient } from "@/actions/clients";
+import { useToast } from "@/lib/toast";
 import type { Client } from "@/types";
 
 const COLOR_OPTIONS = [
-  "#84cc16", "#38bdf8", "#c084fc", "#fb923c",
+  "#84cc16", "#38bdf8", "#10b981", "#fb923c",
   "#f87171", "#fbbf24", "#34d399", "#818cf8",
 ];
 
@@ -23,6 +24,7 @@ export default function ClientFormModal({ client, open, onClose, onSaved }: Clie
   const [selectedColor, setSelectedColor] = useState(client?.color ?? "#84cc16");
   const formRef = useRef<HTMLFormElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
+  const { showToast } = useToast();
 
   const isEditing = !!client;
 
@@ -50,10 +52,13 @@ export default function ClientFormModal({ client, open, onClose, onSaved }: Clie
       : await createClient(formData);
 
     if (result.success) {
+      showToast("success", isEditing ? "Client updated" : "Client created", isEditing ? "Client details saved." : "New client added.");
       onSaved();
       onClose();
     } else {
-      setError(result.error ?? "Something went wrong");
+      const errorMessage = result.error ?? "Something went wrong";
+      showToast("error", "Error", errorMessage);
+      setError(errorMessage);
       setSaving(false);
     }
   }

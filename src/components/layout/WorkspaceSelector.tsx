@@ -42,7 +42,7 @@ export default function WorkspaceSelector() {
                 >
                     <CurrentIcon size={14} />
                 </div>
-                <span className="text-sm font-semibold text-[var(--text-primary)]">
+                <span className="hidden sm:inline text-sm font-semibold text-[var(--text-primary)]">
                     {currentWorkspace.name}
                 </span>
                 <ChevronDown
@@ -67,8 +67,8 @@ export default function WorkspaceSelector() {
                                         setIsOpen(false);
                                     }}
                                     className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition-all duration-200 ${isActive
-                                            ? "bg-[var(--workspace-color-muted)] text-[var(--workspace-color)] border border-[var(--workspace-color-muted)]"
-                                            : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)] border border-transparent"
+                                        ? "bg-[var(--workspace-color-muted)] text-[var(--workspace-color)] border border-[var(--workspace-color-muted)]"
+                                        : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)] border border-transparent"
                                         }`}
                                     style={isActive ? { borderColor: workspace.color } : {}}
                                 >

@@ -110,8 +110,8 @@ export default function DashboardContent({
             <DashboardGreeting tasksRemaining={stats.tasksRemaining} />
 
             {/* Row 1: Stats + Focus Task */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                <div className="lg:col-span-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="md:col-span-2">
                     <StatsRow
                         tasksDoneToday={stats.tasksDoneToday}
                         totalTasksToday={stats.totalTasksToday}
@@ -121,7 +121,7 @@ export default function DashboardContent({
                         hoursToday={timeSummary.totalHours}
                     />
                 </div>
-                <div>
+                <div className="md:col-span-2 lg:col-span-1">
                     <FocusTask task={focusTask} />
                 </div>
             </div>
@@ -133,7 +133,7 @@ export default function DashboardContent({
             <DashboardTaskList tasks={todaysTasks} />
 
             {/* Row 4: Journal Preview + Active Projects */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <DashboardJournal todaysJournal={todaysJournal} />
                 <DashboardProjects projects={activeProjects} tasks={tasks} />
             </div>

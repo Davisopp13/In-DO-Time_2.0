@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { X } from "lucide-react";
 import { createTask, updateTask } from "@/actions/tasks";
+import { useToast } from "@/lib/toast";
 import type { Task } from "@/types";
 import type { ProjectWithClient } from "@/actions/projects";
 
@@ -32,6 +33,7 @@ export default function TaskFormModal({ task, projects, open, onClose, onSaved }
   const [saving, setSaving] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
+  const { showToast } = useToast();
 
   const isEditing = !!task;
 
@@ -57,10 +59,13 @@ export default function TaskFormModal({ task, projects, open, onClose, onSaved }
       : await createTask(formData);
 
     if (result.success) {
+      showToast("success", isEditing ? "Task updated" : "Task created", isEditing ? "Task details saved." : "New task added.");
       onSaved();
       onClose();
     } else {
-      setError(result.error ?? "Something went wrong");
+      const errorMessage = result.error ?? "Something went wrong";
+      showToast("error", "Error", errorMessage);
+      setError(errorMessage);
       setSaving(false);
     }
   }

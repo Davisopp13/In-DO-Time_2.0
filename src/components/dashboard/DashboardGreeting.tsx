@@ -35,7 +35,7 @@ export default function DashboardGreeting({ tasksRemaining }: DashboardGreetingP
 
   return (
     <div>
-      <h1 className="text-3xl md:text-4xl font-bold text-[var(--heading)]">
+      <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[var(--heading)]">
         {greeting}, Davis
         {currentWorkspace && (
           <span

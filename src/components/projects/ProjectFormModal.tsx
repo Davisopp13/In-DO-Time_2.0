@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { X, Ship, Code, User, Bot } from "lucide-react";
 import { createProject, updateProject } from "@/actions/projects";
+import { useToast } from "@/lib/toast";
 import type { Project, Client, Workspace } from "@/types";
 
 const iconMap: Record<string, any> = {
@@ -13,7 +14,7 @@ const iconMap: Record<string, any> = {
 };
 
 const COLOR_OPTIONS = [
-  "#84cc16", "#38bdf8", "#c084fc", "#fb923c",
+  "#84cc16", "#38bdf8", "#10b981", "#fb923c",
   "#f87171", "#fbbf24", "#34d399", "#818cf8",
 ];
 
@@ -38,6 +39,7 @@ export default function ProjectFormModal({ project, clients, workspaces, open, o
   const [selectedColor, setSelectedColor] = useState(project?.color ?? "#84cc16");
   const formRef = useRef<HTMLFormElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
+  const { showToast } = useToast();
 
   const isEditing = !!project;
 
@@ -65,10 +67,13 @@ export default function ProjectFormModal({ project, clients, workspaces, open, o
       : await createProject(formData);
 
     if (result.success) {
+      showToast("success", isEditing ? "Project updated" : "Project created", isEditing ? "Your changes have been saved." : "New project has been added.");
       onSaved();
       onClose();
     } else {
-      setError(result.error ?? "Something went wrong");
+      const errorMessage = result.error ?? "Something went wrong";
+      showToast("error", "Error", errorMessage);
+      setError(errorMessage);
       setSaving(false);
     }
   }

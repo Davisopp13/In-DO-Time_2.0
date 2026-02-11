@@ -766,3 +766,59 @@
   - overflow-x-auto on filter rows + flex-shrink-0 on items prevents wrapping while allowing horizontal scroll
   - -webkit-tap-highlight-color: transparent removes the blue flash on iOS/Android tap
 ---
+
+---
+
+## Iteration 29.1 - Replace purple color theme with green
+- What was implemented:
+  - Replaced all purple color occurrences (#c084fc, #8b5cf6, etc.) with green (#84cc16, #10b981) across the codebase
+  - Updated "Personal" workspace color from Green (#10b981) to distinguish from DO Code Lab (#84cc16)
+  - Updated "DO Code Lab" workspace to use the primary green (#84cc16)
+  - Updated ProjectFormModal and ClientFormModal color pickers to remove purple option
+  - Created migration 003_replace_purple_with_green.sql to update existing database records
+  - Updated actions/workspaces.ts and actions/projects.ts default/fallback colors
+- Files created:
+  - supabase/migrations/003_replace_purple_with_green.sql
+- Files changed:
+  - src/components/projects/ProjectFormModal.tsx
+  - src/components/clients/ClientFormModal.tsx
+  - src/actions/workspaces.ts
+  - src/actions/projects.ts
+  - supabase/migrations/002_workspace_architecture.sql
+- Build passes cleanly
+- Learnings:
+  - Changing a core brand color requires updates across DB seed files, hardcoded fallbacks, and UI options
+  - Migration script ensures existing data is consistent with the new color scheme
+
+---
+
+## Iteration 29.2 - Edge cases: loading skeletons, error handling, toast notifications
+- What was implemented:
+  - Created global loading skeleton (src/app/loading.tsx) matching dashboard layout
+  - Created global error boundary (src/app/error.tsx) with retry logic and debug info
+  - Created global 404 page (src/app/not-found.tsx) with ghost icon and navigation actions
+  - Implemented Toast notification system (src/lib/toast.tsx context + src/components/ui/Toast.tsx component)
+  - Integrated ToastProvider and Toaster into root layout
+  - Updated ProjectFormModal, ClientFormModal, TaskFormModal, NoteFormModal to show success/error toasts
+  - Created reusable Skeleton component (src/components/ui/Skeleton.tsx)
+- Files created:
+  - src/app/loading.tsx
+  - src/app/error.tsx
+  - src/app/not-found.tsx
+  - src/lib/toast.tsx
+  - src/components/ui/Toast.tsx
+  - src/components/ui/Toaster.tsx
+  - src/components/ui/Skeleton.tsx
+- Files changed:
+  - src/app/layout.tsx (added ToastProvider/Toaster)
+  - src/components/projects/ProjectFormModal.tsx (added toast usage)
+  - src/components/clients/ClientFormModal.tsx (added toast usage)
+  - src/components/tasks/TaskFormModal.tsx (added toast usage)
+  - src/components/notes/NoteFormModal.tsx (added toast usage)
+  - PRD.md (task 29 marked complete)
+- Build passes cleanly
+- Learnings:
+  - Toast system requires Context + Provider + Rendering Component (Toaster) pattern
+  - Loading.tsx in App Router automatically handles suspense boundaries for async server components
+  - Error.tsx must be a client component to handle retries and catch errors
+  - Not-found.tsx provides a polished 404 experience instead of default Next.js page

@@ -10,10 +10,10 @@ export interface ProjectWithClient extends Project {
 }
 
 const DEFAULT_WORKSPACES: Record<string, any> = {
-  '1': { id: '1', name: 'Hapag-Lloyd', color: '#fb923c', icon: 'Ship' },
-  '2': { id: '2', name: 'DO Code Lab', color: '#8b5cf6', icon: 'Code' },
+  '1': { id: '1', name: 'Hapag-Lloyd', color: '#38bdf8', icon: 'Ship' },
+  '2': { id: '2', name: 'DO Code Lab', color: '#84cc16', icon: 'Code' },
   '3': { id: '3', name: 'Personal', color: '#10b981', icon: 'User' },
-  '4': { id: '4', name: 'DObot Development', color: '#06b6d4', icon: 'Bot' },
+  '4': { id: '4', name: 'DObot Development', color: '#fb923c', icon: 'Bot' },
 };
 
 const CATEGORY_MAP: Record<string, string> = {

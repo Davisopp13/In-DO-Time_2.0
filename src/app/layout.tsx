@@ -3,6 +3,8 @@ import { Outfit } from "next/font/google";
 import { ThemeProvider } from "@/lib/theme";
 import AppShell from "@/components/layout/AppShell";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
+import { ToastProvider } from "@/lib/toast";
+import { Toaster } from "@/components/ui/Toaster";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -64,10 +66,13 @@ export default async function RootLayout({
       </head>
       <body className={`${outfit.variable} font-outfit antialiased`}>
         <ThemeProvider>
-          <WorkspaceProvider initialWorkspaces={workspaces}>
-            <AppShell>{children}</AppShell>
-            <ServiceWorkerRegistration />
-          </WorkspaceProvider>
+          <ToastProvider>
+            <WorkspaceProvider initialWorkspaces={workspaces}>
+              <AppShell>{children}</AppShell>
+              <ServiceWorkerRegistration />
+              <Toaster />
+            </WorkspaceProvider>
+          </ToastProvider>
         </ThemeProvider>
       </body>
     </html>

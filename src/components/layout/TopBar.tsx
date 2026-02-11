@@ -3,6 +3,7 @@
 import { Search } from "lucide-react";
 import Image from "next/image";
 import WorkspaceSelector from "./WorkspaceSelector";
+import ThemeToggle from "./ThemeToggle";
 
 export default function TopBar() {
   return (
@@ -22,7 +23,7 @@ export default function TopBar() {
         </div>
 
         {/* Workspace Selector */}
-        <div className="hidden md:flex flex-1">
+        <div className="flex flex-1 md:flex-initial">
           <WorkspaceSelector />
         </div>
 
@@ -37,6 +38,9 @@ export default function TopBar() {
 
         {/* Right side - avatar/initial */}
         <div className="flex items-center gap-3">
+          <div className="md:hidden">
+            <ThemeToggle collapsed />
+          </div>
           <div className="w-8 h-8 rounded-full bg-[var(--accent-muted)] flex items-center justify-center text-[var(--accent)] text-sm font-semibold select-none">
             D
           </div>

@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { X, BookOpen, Lightbulb, ClipboardList, FileText } from "lucide-react";
 import { createNote, updateNote } from "@/actions/notes";
+import { useToast } from "@/lib/toast";
 import type { Note } from "@/types";
 import type { ProjectWithClient } from "@/actions/projects";
 
@@ -26,6 +27,7 @@ export default function NoteFormModal({ note, projects, open, onClose, onSaved }
   const [saving, setSaving] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const contentRef = useRef<HTMLTextAreaElement>(null);
+  const { showToast } = useToast();
 
   const isEditing = !!note;
 
@@ -51,10 +53,13 @@ export default function NoteFormModal({ note, projects, open, onClose, onSaved }
       : await createNote(formData);
 
     if (result.success) {
+      showToast("success", isEditing ? "Note updated" : "Note created", isEditing ? "Note details saved." : "New note added.");
       onSaved();
       onClose();
     } else {
-      setError(result.error ?? "Something went wrong");
+      const errorMessage = result.error ?? "Something went wrong";
+      showToast("error", "Error", errorMessage);
+      setError(errorMessage);
       setSaving(false);
     }
   }

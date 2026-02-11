@@ -532,7 +532,7 @@ GET /api/time
 - [x] 26. API endpoints: /api/tasks, /api/tasks/today, /api/projects, /api/dashboard, /api/time
 - [x] 27. PWA manifest, icons, service worker registration
 - [x] 28. Mobile responsive polish (floating island nav, card layouts, touch targets)
-- [ ] 29. Edge cases: empty states, loading skeletons, error handling, toast notifications
+- [x] 29. Edge cases: empty states, loading skeletons, error handling, toast notifications
 - [ ] 30. Final testing, deploy to Vercel
 
 ---
