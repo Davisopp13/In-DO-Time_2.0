@@ -46,9 +46,9 @@ export default function TaskList({ initialTasks, projects }: TaskListProps) {
   const [editingTask, setEditingTask] = useState<TaskWithProject | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Global Workspace Filtering
+  // Global Workspace Filtering — include standalone tasks (no project) in every workspace
   const workspaceTasks = useMemo(() => {
-    return tasks.filter((t) => !currentWorkspace || t.projects?.workspace_id === currentWorkspace.id);
+    return tasks.filter((t) => !currentWorkspace || !t.projects || t.projects.workspace_id === currentWorkspace.id);
   }, [tasks, currentWorkspace]);
 
   const workspaceProjects = useMemo(() => {

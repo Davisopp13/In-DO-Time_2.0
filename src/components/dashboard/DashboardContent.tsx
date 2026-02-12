@@ -78,9 +78,9 @@ export default function DashboardContent({
     const { currentWorkspace } = useWorkspace();
     const today = getTodayStr();
 
-    // Filtering based on current workspace
+    // Filtering based on current workspace — include standalone tasks (no project) in every workspace
     const tasks = useMemo(() => {
-        return initialTasks.filter((t) => !currentWorkspace || t.projects?.workspace_id === currentWorkspace.id);
+        return initialTasks.filter((t) => !currentWorkspace || !t.projects || t.projects.workspace_id === currentWorkspace.id);
     }, [initialTasks, currentWorkspace]);
 
     const activeProjects = useMemo(() => {
