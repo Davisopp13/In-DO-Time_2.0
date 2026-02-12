@@ -17,6 +17,7 @@ import {
   Settings,
 } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
+import { Z_INDEX } from "@/lib/constants";
 
 const navItems = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard },
@@ -36,11 +37,12 @@ export default function Sidebar() {
 
   return (
     <aside
-      className={`hidden md:flex flex-col fixed top-0 left-0 h-screen z-40 transition-all duration-300 ${collapsed ? "w-16" : "w-80"
+      className={`hidden md:flex flex-col fixed top-0 left-0 h-screen transition-all duration-300 ${collapsed ? "w-16" : "w-80"
         }`}
+      style={{ zIndex: Z_INDEX.sidebar }}
     >
       <div
-        className="flex flex-col h-full m-3 mr-0 rounded-2xl glass overflow-hidden transition-all duration-500"
+        className="flex flex-col h-full m-3 mr-0 rounded-2xl glass glass-static overflow-hidden transition-all duration-500"
         style={{ borderColor: `${workspaceColor}30` }}
       >
         {/* Logo */}
@@ -87,20 +89,21 @@ export default function Sidebar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold transition-all duration-200 group ${isActive
-                  ? "text-[var(--text-primary)]"
-                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)]"
-                  } ${collapsed ? "justify-center" : ""}`}
-                style={isActive ? {
-                  backgroundColor: `${workspaceColor}15`,
-                  color: workspaceColor,
-                  border: `1px solid ${workspaceColor}30`
-                } : {}}
+                className={`nav-link flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold ${collapsed ? "justify-center" : ""} ${
+                  isActive
+                    ? ""
+                    : "hover:bg-[var(--surface-hover)]"
+                }`}
+                style={{
+                  backgroundColor: isActive ? `${workspaceColor}15` : 'transparent',
+                  color: isActive ? workspaceColor : 'var(--text-secondary)',
+                  border: `1px solid ${isActive ? `${workspaceColor}30` : 'transparent'}`,
+                }}
                 title={collapsed ? item.label : undefined}
               >
                 <item.icon
                   size={20}
-                  className={`flex-shrink-0 transition-transform group-hover:scale-110 ${isActive ? "" : "text-[var(--text-muted)] group-hover:text-[var(--text-primary)]"}`}
+                  className={`flex-shrink-0 ${isActive ? "" : "text-[var(--text-muted)]"}`}
                 />
                 {!collapsed && <span>{item.label}</span>}
               </Link>
@@ -112,15 +115,14 @@ export default function Sidebar() {
         <div className="px-3 pb-6 flex flex-col gap-1">
           <Link
             href="/settings"
-            className={`flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)] transition-all duration-200 ${pathname === "/settings"
-              ? "text-[var(--text-primary)]"
-              : ""
-              } ${collapsed ? "justify-center" : ""}`}
-            style={pathname === "/settings" ? {
-              backgroundColor: `${workspaceColor}15`,
-              color: workspaceColor,
-              border: `1px solid ${workspaceColor}30`
-            } : {}}
+            className={`nav-link flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold ${collapsed ? "justify-center" : ""} ${
+              pathname === "/settings" ? "" : "hover:bg-[var(--surface-hover)]"
+            }`}
+            style={{
+              backgroundColor: pathname === "/settings" ? `${workspaceColor}15` : 'transparent',
+              color: pathname === "/settings" ? workspaceColor : 'var(--text-secondary)',
+              border: `1px solid ${pathname === "/settings" ? `${workspaceColor}30` : 'transparent'}`,
+            }}
             title={collapsed ? "Settings" : undefined}
           >
             <Settings size={20} className="flex-shrink-0" />

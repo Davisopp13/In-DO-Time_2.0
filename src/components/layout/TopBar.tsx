@@ -4,10 +4,18 @@ import { Search } from "lucide-react";
 import Image from "next/image";
 import WorkspaceSelector from "./WorkspaceSelector";
 import ThemeToggle from "./ThemeToggle";
+import SyncStatus from "@/components/SyncStatus";
+import { useSyncContext } from "@/lib/sync";
+import { Z_INDEX } from "@/lib/constants";
 
 export default function TopBar() {
+  const { syncStatus, lastSyncedAt, triggerSync } = useSyncContext();
+
   return (
-    <header className="sticky top-0 z-30 px-4 py-3 md:px-6">
+    <header
+      className="sticky top-0 px-4 py-3 md:px-6"
+      style={{ zIndex: Z_INDEX.header, paddingTop: "max(0.75rem, var(--safe-area-top))" }}
+    >
       <div className="glass flex items-center justify-between px-4 py-2.5 rounded-2xl">
         {/* Mobile logo */}
         <div className="flex items-center md:hidden">
@@ -36,8 +44,13 @@ export default function TopBar() {
           </kbd>
         </div>
 
-        {/* Right side - avatar/initial */}
-        <div className="flex items-center gap-3">
+        {/* Right side */}
+        <div className="flex items-center gap-2">
+          <SyncStatus
+            status={syncStatus}
+            lastSyncedAt={lastSyncedAt}
+            onManualSync={triggerSync}
+          />
           <div className="md:hidden">
             <ThemeToggle collapsed />
           </div>

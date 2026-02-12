@@ -35,10 +35,10 @@ export default function StatsRow({
   };
 
   return (
-    <div className="flex flex-col sm:flex-row gap-4 items-stretch">
+    <div className="flex flex-col sm:flex-row gap-5 items-stretch">
       {/* Progress Ring */}
       <div
-        className="glass p-5 flex items-center justify-center flex-shrink-0"
+        className="glass p-5 flex items-center justify-center flex-shrink-0 shadow-md"
         style={{ borderRadius: "1.25rem" }}
       >
         <ProgressRing
@@ -52,11 +52,11 @@ export default function StatsRow({
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 flex-1">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 flex-1">
         {statCards.map(({ key, label, icon: Icon, color }) => (
           <div
             key={key}
-            className="glass p-4 flex flex-col gap-1"
+            className="glass p-4 flex flex-col gap-1 shadow-md"
             style={{ borderRadius: "1.25rem" }}
           >
             <div className="flex items-center gap-2">

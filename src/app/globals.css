@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --safe-area-top: env(safe-area-inset-top);
+  --safe-area-bottom: env(safe-area-inset-bottom);
+  --safe-area-left: env(safe-area-inset-left);
+  --safe-area-right: env(safe-area-inset-right);
+}
+
 :root,
 [data-theme="dark"] {
   /* Dark Mode - "Mountain Night" (default) */
@@ -126,7 +133,7 @@ body::before {
   border-radius: 1.25rem;
 }
 
-.glass:hover {
+.glass:hover:not(.glass-static) {
   background: var(--surface-hover);
   border-color: var(--border-hover);
 }
@@ -144,15 +151,21 @@ body::before {
   content: "▲ ";
 }
 
-/* Transitions */
-* {
+/* Transitions — only interactive elements, not everything */
+a, button, input, select, textarea, [role="button"] {
   transition-property: background-color, border-color, color, box-shadow, opacity;
-  transition-duration: 200ms;
+  transition-duration: 150ms;
   transition-timing-function: ease;
 }
 
+/* Nav links — instant active-state switch, GPU-promoted */
+.nav-link {
+  will-change: background-color, color, border-color;
+  transition: background-color 100ms ease, color 0ms, border-color 100ms ease;
+}
+
 [data-theme] {
-  transition-duration: 500ms;
+  transition: background-color 500ms ease, border-color 500ms ease, color 500ms ease;
 }
 
 /* Accent glow animation */

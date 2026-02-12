@@ -35,6 +35,9 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   themeColor: "#84cc16",
   viewportFit: "cover",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
 };
 
 // Inline script to set data-theme before first paint, preventing FOUC
@@ -51,6 +54,7 @@ const themeScript = `
 
 import { getWorkspaces } from "@/actions/workspaces";
 import { WorkspaceProvider } from "@/lib/workspace";
+import { SyncProvider } from "@/lib/sync";
 
 export default async function RootLayout({
   children,
@@ -68,9 +72,11 @@ export default async function RootLayout({
         <ThemeProvider>
           <ToastProvider>
             <WorkspaceProvider initialWorkspaces={workspaces}>
-              <AppShell>{children}</AppShell>
-              <ServiceWorkerRegistration />
-              <Toaster />
+              <SyncProvider>
+                <AppShell>{children}</AppShell>
+                <ServiceWorkerRegistration />
+                <Toaster />
+              </SyncProvider>
             </WorkspaceProvider>
           </ToastProvider>
         </ThemeProvider>

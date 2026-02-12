@@ -9,6 +9,7 @@ import {
   CheckSquare,
   StickyNote,
 } from "lucide-react";
+import { Z_INDEX } from "@/lib/constants";
 
 const navItems = [
   { href: "/", label: "Home", icon: LayoutDashboard },
@@ -22,7 +23,7 @@ export default function MobileNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed left-1/2 -translate-x-1/2 z-50 md:hidden" style={{ bottom: "max(1rem, env(safe-area-inset-bottom))" }}>
+    <nav className="fixed left-1/2 -translate-x-1/2 md:hidden" style={{ bottom: "max(1rem, env(safe-area-inset-bottom))", zIndex: Z_INDEX.header }}>
       <div className="glass flex items-center gap-0.5 px-2 py-1.5 rounded-full shadow-lg shadow-black/20">
         {navItems.map((item) => {
           const isActive =
@@ -33,7 +34,7 @@ export default function MobileNav() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-col items-center justify-center min-w-[44px] min-h-[44px] px-2 py-1 rounded-full transition-all duration-200 ${
+              className={`nav-link flex flex-col items-center justify-center min-w-[44px] min-h-[44px] px-2 py-1 rounded-full ${
                 isActive
                   ? "text-[var(--accent)] bg-[var(--accent-muted)]"
                   : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
