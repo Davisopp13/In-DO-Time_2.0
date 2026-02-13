@@ -1110,3 +1110,24 @@
   - The key gaps were: DashboardTaskList (handleToggle), ActiveTimersStrip (handleStop), and several inline arrows in TimerDashboard/AppShell
   - useMemo for sortedTasks in DashboardTaskList prevents unnecessary re-sorts on re-renders
 ---
+
+## Iteration 44 - Task 26: Create skeleton loading components
+- What was implemented:
+  - Created `src/components/skeletons/TaskListSkeleton.tsx` — matches TaskList layout: header (trail marker + title + view toggle + button), toolbar (filter pills + search + project dropdown), 8 task rows (checkbox + priority badge + title + project + due date)
+  - Created `src/components/skeletons/DashboardSkeleton.tsx` — matches DashboardContent layout: greeting, stats row (progress ring + 4 stat cards) + focus task, active timers strip, today's tasks (4 rows), journal + projects grid
+  - Both use `Skeleton` component from `ui/Skeleton.tsx` which applies `animate-pulse` + `bg-[var(--surface-hover)]`
+  - Both use `animate-in fade-in duration-500` for smooth appearance
+  - Task row skeletons match real TaskRow dimensions: checkbox (w-5 h-5), priority badge (w-8 h-5), title + project, due date (hidden sm:block)
+  - Dashboard skeleton matches all 5 rows of DashboardContent with proper grid layouts
+- Files created:
+  - src/components/skeletons/TaskListSkeleton.tsx
+  - src/components/skeletons/DashboardSkeleton.tsx
+- Files changed:
+  - PRD.md (Task 26 marked complete)
+- All 60 tests pass, TypeScript check passes
+- Learnings for future iterations:
+  - Existing Skeleton component uses `bg-[var(--surface-hover)]` — theme-aware, works in both dark/light mode
+  - The app/loading.tsx already existed as a global loading skeleton — the new skeletons are reusable components for specific pages
+  - Using `style={{ width: ... }}` with percentage for varied title widths gives a more natural skeleton appearance
+  - Glass containers (`glass border border-[var(--border)]`) on skeleton wrappers match real component styling
+---
