@@ -1,6 +1,7 @@
 import { getNotes } from "@/actions/notes";
 import { getActiveProjects } from "@/actions/projects";
 import NoteList from "@/components/notes/NoteList";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 export default async function NotesPage() {
   const [notes, projects] = await Promise.all([
@@ -8,5 +9,9 @@ export default async function NotesPage() {
     getActiveProjects(),
   ]);
 
-  return <NoteList initialNotes={notes} projects={projects} />;
+  return (
+    <ErrorBoundary>
+      <NoteList initialNotes={notes} projects={projects} />
+    </ErrorBoundary>
+  );
 }

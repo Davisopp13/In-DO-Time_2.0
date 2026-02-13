@@ -2,6 +2,7 @@ import { getTimeEntries } from "@/actions/time-entries";
 import { getProjects } from "@/actions/projects";
 import { getClients } from "@/actions/clients";
 import ReportsView from "@/components/reports/ReportsView";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 export default async function ReportsPage() {
   // Default to "this week" — Monday to Sunday
@@ -30,12 +31,14 @@ export default async function ReportsPage() {
   ]);
 
   return (
-    <ReportsView
-      initialEntries={entries}
-      projects={projects}
-      clients={clients}
-      initialStartDate={startDate}
-      initialEndDate={endDate}
-    />
+    <ErrorBoundary>
+      <ReportsView
+        initialEntries={entries}
+        projects={projects}
+        clients={clients}
+        initialStartDate={startDate}
+        initialEndDate={endDate}
+      />
+    </ErrorBoundary>
   );
 }

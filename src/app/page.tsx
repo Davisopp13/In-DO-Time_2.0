@@ -3,6 +3,7 @@ import { getActiveProjects } from "@/actions/projects";
 import { getTodaysTimeSummary } from "@/actions/time-entries";
 import { getNotes } from "@/actions/notes";
 import DashboardContent from "@/components/dashboard/DashboardContent";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 export default async function DashboardPage() {
   const [tasks, activeProjects, timeSummary, notes] = await Promise.all([
@@ -13,11 +14,13 @@ export default async function DashboardPage() {
   ]);
 
   return (
-    <DashboardContent
-      initialTasks={tasks}
-      initialProjects={activeProjects}
-      timeSummary={timeSummary}
-      notes={notes}
-    />
+    <ErrorBoundary>
+      <DashboardContent
+        initialTasks={tasks}
+        initialProjects={activeProjects}
+        timeSummary={timeSummary}
+        notes={notes}
+      />
+    </ErrorBoundary>
   );
 }

@@ -1131,3 +1131,31 @@
   - Using `style={{ width: ... }}` with percentage for varied title widths gives a more natural skeleton appearance
   - Glass containers (`glass border border-[var(--border)]`) on skeleton wrappers match real component styling
 ---
+
+## Iteration 45 - Task 27: ErrorBoundary with retry buttons
+- What was implemented:
+  - Created reusable `src/components/ErrorBoundary.tsx` — React class component (required for error boundaries)
+  - Features: catches runtime errors in child components, shows inline error UI with retry button, dev-mode error details
+  - Accepts optional `fallback` prop for custom error UI
+  - Compact inline design (not full-page) — shows "Something went wrong" + "This section encountered an error. The rest of the app still works." + Retry button
+  - Retry resets error state, re-renders children
+  - Wrapped all 6 main content pages: Dashboard, Tasks, Notes, Timers, Reports, Projects
+  - Existing `app/error.tsx` handles server-side/route-level errors; ErrorBoundary handles client-side render errors
+- Files created:
+  - src/components/ErrorBoundary.tsx
+- Files changed:
+  - src/app/page.tsx (wrapped DashboardContent in ErrorBoundary)
+  - src/app/tasks/page.tsx (wrapped TaskList in ErrorBoundary)
+  - src/app/notes/page.tsx (wrapped NoteList in ErrorBoundary)
+  - src/app/timers/page.tsx (wrapped TimerDashboard in ErrorBoundary)
+  - src/app/reports/page.tsx (wrapped ReportsView in ErrorBoundary)
+  - src/app/projects/page.tsx (wrapped ProjectList in ErrorBoundary)
+  - PRD.md (Task 27 marked complete)
+- All 60 tests pass, TypeScript check passes
+- Learnings for future iterations:
+  - React error boundaries MUST be class components — hooks cannot catch render errors (no useErrorBoundary in React core)
+  - Client components ("use client") can be imported and used in server components — ErrorBoundary works in async server pages
+  - Two layers of error handling: app/error.tsx for route-level (server errors, unhandled rejects), ErrorBoundary for client-side render errors within components
+  - The compact inline design (py-16, max-w-xs text) is better for section-level boundaries than full-page takeovers
+  - getDerivedStateFromError returns new state synchronously, componentDidCatch logs asynchronously — both needed
+---
