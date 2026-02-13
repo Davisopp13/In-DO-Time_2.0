@@ -79,7 +79,8 @@ export default function ProjectCard({ project, taskCounts, onEdit, onArchive, on
             <button
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); onEdit(project); }}
               className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-[var(--surface-hover)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-all"
-              title="Edit"
+              title="Edit project"
+              aria-label="Edit project"
             >
               <Pencil size={14} />
             </button>
@@ -87,7 +88,8 @@ export default function ProjectCard({ project, taskCounts, onEdit, onArchive, on
               <button
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); onRestore(project.id); }}
                 className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-[var(--surface-hover)] text-[var(--text-muted)] hover:text-[var(--accent)] transition-all"
-                title="Restore"
+                title="Restore project"
+                aria-label="Restore project"
               >
                 <ArchiveRestore size={14} />
               </button>
@@ -95,7 +97,8 @@ export default function ProjectCard({ project, taskCounts, onEdit, onArchive, on
               <button
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); onArchive(project.id); }}
                 className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-[var(--surface-hover)] text-[var(--text-muted)] hover:text-[var(--danger)] transition-all"
-                title="Archive"
+                title="Archive project"
+                aria-label="Archive project"
               >
                 <Archive size={14} />
               </button>

@@ -100,6 +100,7 @@ export default function Sidebar() {
                   border: `1px solid ${isActive ? `${workspaceColor}30` : 'transparent'}`,
                 }}
                 title={collapsed ? item.label : undefined}
+                aria-label={item.label}
               >
                 <item.icon
                   size={20}
@@ -124,6 +125,7 @@ export default function Sidebar() {
               border: `1px solid ${pathname === "/settings" ? `${workspaceColor}30` : 'transparent'}`,
             }}
             title={collapsed ? "Settings" : undefined}
+            aria-label="Settings"
           >
             <Settings size={20} className="flex-shrink-0" />
             {!collapsed && <span>Settings</span>}
@@ -135,7 +137,8 @@ export default function Sidebar() {
             onClick={toggleCollapsed}
             className={`flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)] transition-all duration-200 ${collapsed ? "justify-center" : ""
               }`}
-            title={collapsed ? "Expand" : "Collapse"}
+            title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
             {collapsed ? (
               <PanelLeft size={20} className="flex-shrink-0" />

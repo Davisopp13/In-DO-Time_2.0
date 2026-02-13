@@ -105,6 +105,8 @@ export default function WorkspaceSelector() {
                 ref={triggerRef}
                 onClick={() => setIsOpen(!isOpen)}
                 className="flex items-center gap-2 px-3 py-1.5 rounded-full glass border-[var(--workspace-color-muted)] hover:border-[var(--workspace-color)] transition-all duration-300 group"
+                aria-label={`Switch workspace, current: ${currentWorkspace.name}`}
+                aria-expanded={isOpen}
             >
                 <div
                     className="w-6 h-6 rounded-full flex items-center justify-center text-white"

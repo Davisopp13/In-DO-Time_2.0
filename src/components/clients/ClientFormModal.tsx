@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { X } from "lucide-react";
 import { createClient, updateClient } from "@/actions/clients";
 import { useToast } from "@/lib/toast";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 import type { Client } from "@/types";
 
 const COLOR_OPTIONS = [
@@ -25,6 +26,7 @@ export default function ClientFormModal({ client, open, onClose, onSaved }: Clie
   const formRef = useRef<HTMLFormElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
   const { showToast } = useToast();
+  const focusTrapRef = useFocusTrap(open);
 
   const isEditing = !!client;
 
@@ -36,6 +38,16 @@ export default function ClientFormModal({ client, open, onClose, onSaved }: Clie
       setTimeout(() => nameRef.current?.focus(), 100);
     }
   }, [open, client]);
+
+  // Escape to close
+  useEffect(() => {
+    if (!open) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", handleKey);
+    return () => document.removeEventListener("keydown", handleKey);
+  }, [open, onClose]);
 
   if (!open) return null;
 
@@ -64,7 +76,7 @@ export default function ClientFormModal({ client, open, onClose, onSaved }: Clie
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4" role="dialog" aria-modal="true" aria-label={isEditing ? "Edit client" : "Add client"} ref={focusTrapRef}>
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
@@ -81,6 +93,7 @@ export default function ClientFormModal({ client, open, onClose, onSaved }: Clie
           <button
             onClick={onClose}
             className="p-1.5 rounded-lg hover:bg-[var(--surface-hover)] text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+            aria-label="Close"
           >
             <X size={18} />
           </button>
@@ -153,6 +166,7 @@ export default function ClientFormModal({ client, open, onClose, onSaved }: Clie
                     transform: selectedColor === color ? "scale(1.15)" : "scale(1)",
                   }}
                   title={color}
+                  aria-label={`Select color ${color}`}
                 />
               ))}
             </div>

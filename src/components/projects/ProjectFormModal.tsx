@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { X, Ship, Code, User, Bot } from "lucide-react";
 import { createProject, updateProject } from "@/actions/projects";
 import { useToast } from "@/lib/toast";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 import type { Project, Client, Workspace } from "@/types";
 
 const iconMap: Record<string, any> = {
@@ -40,6 +41,7 @@ export default function ProjectFormModal({ project, clients, workspaces, open, o
   const formRef = useRef<HTMLFormElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
   const { showToast } = useToast();
+  const focusTrapRef = useFocusTrap(open);
 
   const isEditing = !!project;
 
@@ -51,6 +53,16 @@ export default function ProjectFormModal({ project, clients, workspaces, open, o
       setTimeout(() => nameRef.current?.focus(), 100);
     }
   }, [open, project]);
+
+  // Escape to close
+  useEffect(() => {
+    if (!open) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", handleKey);
+    return () => document.removeEventListener("keydown", handleKey);
+  }, [open, onClose]);
 
   if (!open) return null;
 
@@ -79,7 +91,7 @@ export default function ProjectFormModal({ project, clients, workspaces, open, o
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4" role="dialog" aria-modal="true" aria-label={isEditing ? "Edit project" : "New project"} ref={focusTrapRef}>
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
@@ -96,6 +108,7 @@ export default function ProjectFormModal({ project, clients, workspaces, open, o
           <button
             onClick={onClose}
             className="p-1.5 rounded-lg hover:bg-[var(--surface-hover)] text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+            aria-label="Close"
           >
             <X size={18} />
           </button>
@@ -244,6 +257,7 @@ export default function ProjectFormModal({ project, clients, workspaces, open, o
                     transform: selectedColor === color ? "scale(1.15)" : "scale(1)",
                   }}
                   title={color}
+                  aria-label={`Select color ${color}`}
                 />
               ))}
             </div>

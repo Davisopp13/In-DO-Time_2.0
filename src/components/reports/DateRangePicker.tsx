@@ -139,6 +139,7 @@ export default function DateRangePicker({ startDate, endDate, onRangeChange }: D
             setPreset("custom");
             onRangeChange(e.target.value, endDate);
           }}
+          aria-label="Start date"
           className="px-3 py-2 rounded-xl text-sm min-h-[44px]"
           style={{
             background: "var(--surface)",
@@ -155,6 +156,7 @@ export default function DateRangePicker({ startDate, endDate, onRangeChange }: D
             setPreset("custom");
             onRangeChange(startDate, e.target.value);
           }}
+          aria-label="End date"
           className="px-3 py-2 rounded-xl text-sm min-h-[44px]"
           style={{
             background: "var(--surface)",

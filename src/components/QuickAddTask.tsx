@@ -16,6 +16,7 @@ import { Z_INDEX } from "@/lib/constants";
 import { parseTaskInput } from "@/utils/parseTaskInput";
 import { buildProjectAliasMap } from "@/hooks/useProjectAliases";
 import { useOptimisticTasks } from "@/hooks/useOptimisticTask";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 import type { ProjectWithClient } from "@/actions/projects";
 
 interface QuickAddTaskProps {
@@ -40,6 +41,7 @@ export default function QuickAddTask({
   const { showToast } = useToast();
   const { currentWorkspace } = useWorkspace();
   const { optimisticCreate } = useOptimisticTasks({ initialTasks: [] });
+  const focusTrapRef = useFocusTrap(open);
 
   // Filter projects by current workspace
   const workspaceProjects = useMemo(
@@ -190,6 +192,7 @@ export default function QuickAddTask({
       role="dialog"
       aria-modal="true"
       aria-label="Quick add task"
+      ref={focusTrapRef}
     >
       {/* Backdrop */}
       <div

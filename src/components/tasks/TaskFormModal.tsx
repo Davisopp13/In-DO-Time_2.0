@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { X } from "lucide-react";
 import { createTask, updateTask } from "@/actions/tasks";
 import { useToast } from "@/lib/toast";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 import type { Task } from "@/types";
 import type { ProjectWithClient } from "@/actions/projects";
 
@@ -34,6 +35,7 @@ export default function TaskFormModal({ task, projects, open, onClose, onSaved }
   const formRef = useRef<HTMLFormElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
   const { showToast } = useToast();
+  const focusTrapRef = useFocusTrap(open);
 
   const isEditing = !!task;
 
@@ -44,6 +46,16 @@ export default function TaskFormModal({ task, projects, open, onClose, onSaved }
       setTimeout(() => titleRef.current?.focus(), 100);
     }
   }, [open, task]);
+
+  // Escape to close
+  useEffect(() => {
+    if (!open) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", handleKey);
+    return () => document.removeEventListener("keydown", handleKey);
+  }, [open, onClose]);
 
   if (!open) return null;
 
@@ -71,7 +83,7 @@ export default function TaskFormModal({ task, projects, open, onClose, onSaved }
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4" role="dialog" aria-modal="true" aria-label={isEditing ? "Edit task" : "New task"} ref={focusTrapRef}>
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
@@ -88,6 +100,7 @@ export default function TaskFormModal({ task, projects, open, onClose, onSaved }
           <button
             onClick={onClose}
             className="p-1.5 rounded-lg hover:bg-[var(--surface-hover)] text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+            aria-label="Close"
           >
             <X size={18} />
           </button>

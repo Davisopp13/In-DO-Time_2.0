@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X, Play, Clock } from "lucide-react";
 import { startTimer } from "@/actions/time-entries";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 import type { ProjectWithClient } from "@/actions/projects";
 
 export default function StartTimerModal({
@@ -17,6 +18,16 @@ export default function StartTimerModal({
   const [selectedProjectId, setSelectedProjectId] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const focusTrapRef = useFocusTrap(true);
+
+  // Escape to close
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", handleKey);
+    return () => document.removeEventListener("keydown", handleKey);
+  }, [onClose]);
 
   // Group projects by client
   const grouped = new Map<string, ProjectWithClient[]>();
@@ -45,7 +56,7 @@ export default function StartTimerModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4" role="dialog" aria-modal="true" aria-label="Start timer" ref={focusTrapRef}>
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
@@ -68,6 +79,7 @@ export default function StartTimerModal({
             <button
               onClick={onClose}
               className="p-1.5 rounded-lg hover:bg-[var(--surface-hover)]"
+              aria-label="Close"
             >
               <X size={18} className="text-[var(--text-muted)]" />
             </button>

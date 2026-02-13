@@ -103,7 +103,8 @@ export default function NoteCard({ note, onEdit, onDelete, onTogglePin }: NoteCa
             className={`min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-[var(--surface-hover)] transition-colors ${
               note.pinned ? "text-[var(--accent)]" : "text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
             }`}
-            title={note.pinned ? "Unpin" : "Pin"}
+            title={note.pinned ? "Unpin note" : "Pin note"}
+            aria-label={note.pinned ? "Unpin note" : "Pin note"}
           >
             <Pin size={14} />
           </button>
@@ -113,7 +114,8 @@ export default function NoteCard({ note, onEdit, onDelete, onTogglePin }: NoteCa
               onEdit(note);
             }}
             className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg text-[var(--text-muted)] hover:text-[var(--text-secondary)] hover:bg-[var(--surface-hover)] transition-colors"
-            title="Edit"
+            title="Edit note"
+            aria-label="Edit note"
           >
             <Pencil size={14} />
           </button>
@@ -123,7 +125,8 @@ export default function NoteCard({ note, onEdit, onDelete, onTogglePin }: NoteCa
               onDelete(note.id);
             }}
             className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg text-[var(--text-muted)] hover:text-[var(--danger)] hover:bg-[var(--surface-hover)] transition-colors"
-            title="Delete"
+            title="Delete note"
+            aria-label="Delete note"
           >
             <Trash2 size={14} />
           </button>

@@ -88,7 +88,7 @@ popover: 60, toast: 70, tooltip: 80
 - [x] **Task 26:** Create skeleton loading components: `components/skeletons/TaskListSkeleton.tsx`, `components/skeletons/DashboardSkeleton.tsx`. Match the layout dimensions of their real counterparts. Use `animate-pulse` on gray placeholder blocks.
 - [x] **Task 27:** Add error boundaries with retry buttons around main content areas (task list, dashboard). Create a reusable `components/ErrorBoundary.tsx`.
 - [x] **Task 28:** Audit all buttons and interactive elements — ensure minimum 44×44px touch targets. Fix any that are smaller by adding padding or min-h/min-w classes.
-- [ ] **Task 29:** Add `aria-label` to all icon-only buttons (FAB, sync status, workspace switcher trigger, etc.). Ensure all modals trap focus and return focus to trigger on close.
+- [x] **Task 29:** Add `aria-label` to all icon-only buttons (FAB, sync status, workspace switcher trigger, etc.). Ensure all modals trap focus and return focus to trigger on close.
 - [ ] **Task 30:** Increase stat card vertical spacing from 16px to 20px. Upgrade card shadows from `shadow-sm` to `shadow-md`. Final visual consistency check across all new components.
 
 ---

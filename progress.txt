@@ -1194,3 +1194,51 @@
   - Components that already pass: FAB (56px), MobileNav (44px explicit), QuickAddTask submit, ErrorBoundary retry, Sidebar nav links
   - Desktop-only breakpoint overrides (md:p-1.5) should be avoided for touch targets — desktop mice still benefit from larger click areas
 ---
+
+## Iteration 47 - Task 29: Aria-labels and modal focus management
+- What was implemented:
+  - Created `hooks/useFocusTrap.ts` — reusable hook that traps Tab focus within a container and restores focus to trigger element on close
+  - Added `aria-label` to all icon-only buttons across 10 components:
+    - TaskRow.tsx: checkbox ("Mark task complete/incomplete"), edit, delete buttons
+    - ProjectCard.tsx: edit, archive, restore buttons
+    - NoteCard.tsx: pin, edit, delete buttons
+    - ClientCard.tsx: edit, archive, restore buttons
+    - Sidebar.tsx: collapse/expand button, all nav links (for collapsed state), Settings link
+    - DashboardTaskList.tsx: checkbox buttons
+    - WorkspaceSelector.tsx: trigger button with aria-expanded
+    - DateRangePicker.tsx: start/end date inputs
+    - Color swatch buttons in ProjectFormModal and ClientFormModal
+  - Added focus trapping + Escape key handling + role="dialog" + aria-modal="true" to 7 modals:
+    - TaskFormModal, ProjectFormModal, NoteFormModal, ClientFormModal
+    - StartTimerModal, ManualEntryForm
+    - QuickAddTask (already had role/aria-modal, added focus trap)
+  - All modals now restore focus to the trigger element when closed
+- Files created:
+  - src/hooks/useFocusTrap.ts
+- Files changed:
+  - src/components/tasks/TaskRow.tsx (aria-labels on checkbox, edit, delete)
+  - src/components/projects/ProjectCard.tsx (aria-labels on edit, archive, restore)
+  - src/components/notes/NoteCard.tsx (aria-labels on pin, edit, delete)
+  - src/components/clients/ClientCard.tsx (aria-labels on edit, archive, restore)
+  - src/components/layout/Sidebar.tsx (aria-labels on nav links, settings, collapse)
+  - src/components/layout/WorkspaceSelector.tsx (aria-label + aria-expanded on trigger)
+  - src/components/dashboard/DashboardTaskList.tsx (aria-label on checkbox)
+  - src/components/reports/DateRangePicker.tsx (aria-labels on date inputs)
+  - src/components/tasks/TaskFormModal.tsx (focus trap, Escape, aria)
+  - src/components/projects/ProjectFormModal.tsx (focus trap, Escape, aria, color buttons)
+  - src/components/notes/NoteFormModal.tsx (focus trap, Escape, aria)
+  - src/components/clients/ClientFormModal.tsx (focus trap, Escape, aria, color buttons)
+  - src/components/timers/StartTimerModal.tsx (focus trap, Escape, aria)
+  - src/components/timers/ManualEntryForm.tsx (focus trap, Escape, aria)
+  - src/components/QuickAddTask.tsx (focus trap ref added)
+  - PRD.md (Task 29 marked complete)
+- All 60 tests pass, TypeScript check passes
+- Learnings for future iterations:
+  - useFocusTrap stores document.activeElement on activation and restores it with setTimeout(0) after deactivation
+  - Focus trap uses FOCUSABLE_SELECTOR constant matching standard focusable elements, filtered by offsetParent !== null for visibility
+  - The prevActive ref pattern detects the transition from active→inactive to trigger focus restoration
+  - Modals that use `if (!open) return null` need the focus trap on the outer wrapper div that's always rendered (the one with `fixed inset-0`)
+  - StartTimerModal and ManualEntryForm don't have an `open` prop — they're always rendered when mounted, so `useFocusTrap(true)` is used
+  - `title` attribute is NOT sufficient for screen readers — `aria-label` is required for icon-only buttons
+  - Only Task 30 remains in the entire PRD
+---

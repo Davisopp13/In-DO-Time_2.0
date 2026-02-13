@@ -43,7 +43,8 @@ export default function ClientCard({ client, onEdit, onArchive, onRestore }: Cli
           <button
             onClick={() => onEdit(client)}
             className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-[var(--surface-hover)] text-[var(--text-muted)] hover:text-[var(--text-primary)]"
-            title="Edit"
+            title="Edit client"
+            aria-label="Edit client"
           >
             <Pencil size={14} />
           </button>
@@ -51,7 +52,8 @@ export default function ClientCard({ client, onEdit, onArchive, onRestore }: Cli
             <button
               onClick={() => onRestore(client.id)}
               className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-[var(--surface-hover)] text-[var(--text-muted)] hover:text-[var(--accent)]"
-              title="Restore"
+              title="Restore client"
+              aria-label="Restore client"
             >
               <ArchiveRestore size={14} />
             </button>
@@ -59,7 +61,8 @@ export default function ClientCard({ client, onEdit, onArchive, onRestore }: Cli
             <button
               onClick={() => onArchive(client.id)}
               className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-[var(--surface-hover)] text-[var(--text-muted)] hover:text-[var(--danger)]"
-              title="Archive"
+              title="Archive client"
+              aria-label="Archive client"
             >
               <Archive size={14} />
             </button>

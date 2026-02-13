@@ -59,6 +59,7 @@ export default function TaskRow({ task, onToggle, onEdit, onDelete }: TaskRowPro
       <button
         onClick={(e) => { e.stopPropagation(); onToggle(task.id, task.status); }}
         className="flex-shrink-0 flex items-center justify-center w-11 h-11 -m-1.5"
+        aria-label={isDone ? "Mark task incomplete" : "Mark task complete"}
       >
         <span className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${
           isDone
@@ -123,6 +124,7 @@ export default function TaskRow({ task, onToggle, onEdit, onDelete }: TaskRowPro
           onClick={(e) => { e.stopPropagation(); onEdit(task); }}
           className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-[var(--surface-hover)] text-[var(--text-muted)] hover:text-[var(--text-primary)]"
           title="Edit task"
+          aria-label="Edit task"
         >
           <Pencil size={14} />
         </button>
@@ -130,6 +132,7 @@ export default function TaskRow({ task, onToggle, onEdit, onDelete }: TaskRowPro
           onClick={(e) => { e.stopPropagation(); onDelete(task.id); }}
           className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-[var(--surface-hover)] text-[var(--text-muted)] hover:text-[var(--danger)]"
           title="Delete task"
+          aria-label="Delete task"
         >
           <Trash2 size={14} />
         </button>
