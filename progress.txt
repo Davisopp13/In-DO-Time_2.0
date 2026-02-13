@@ -844,3 +844,24 @@
   - Only hardcoded z-index remaining is z-index: 0 in globals.css for background glow pseudo-element — acceptable since CSS can't import JS constants
   - Safe area CSS variables and viewport-fit: cover were added during iteration 28 (mobile responsive polish)
   - WorkspaceSelector already had Sheet for mobile + portal dropdown for desktop from a prior iteration
+
+## Iteration 31 - Task 7: Create parseTaskInput utility
+- What was implemented:
+  - Created `src/utils/parseTaskInput.ts` with `ParsedTask` interface and `parseTaskInput(input, context?)` function
+  - Exports: `ParsedTask` interface (title, due_date, priority, project, tags, assignee), `ParseContext` interface, `parseTaskInput` function
+  - Parsing order (each match removed from title): (1) Project @name or /tasks@name with alias lookup, (2) Tags #tagname, (3) Dates: today/tomorrow/next week/in N days/MM-DD/weekday names, (4) Priority: !!!/urgent/asap→high, !!/important→high, !→medium, "low priority"→low, (5) Assignee +username
+  - Date handling: uses native Date (no date-fns needed), weekdays always resolve to NEXT occurrence, MM/DD rolls to next year if in the past
+  - Priority regex uses lookbehind/lookahead to prevent single ! from matching within !! or !!!
+  - Final cleanup: collapse multiple spaces, trim
+- Files created:
+  - src/utils/parseTaskInput.ts
+- Files changed:
+  - PRD.md (Task 7 marked complete)
+- Learnings for future iterations:
+  - No date-fns installed — native Date is sufficient for the parsing needs
+  - No test framework installed (no jest/vitest) — Task 8 will need to set one up
+  - The regex for `(?<![!])!(?![!])` handles single ! without catching !! or !!! — lookbehind/lookahead pattern
+  - Weekday name resolution: diff = target - current; if diff <= 0, add 7 (always next occurrence, never today)
+  - MM/DD date pattern checks validity (1-12 month, 1-31 day) and rolls to next year if already past
+  - Project alias lookup is case-insensitive (lowercased before lookup)
+---
