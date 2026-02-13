@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { CheckSquare, Calendar } from "lucide-react";
 import { toggleTaskStatus } from "@/actions/tasks";
 import { useRouter } from "next/navigation";
@@ -37,13 +37,13 @@ export default function DashboardTaskList({ tasks: initialTasks }: DashboardTask
   const priorityOrder: Record<string, number> = { p1: 0, p2: 1, p3: 2, p4: 3 };
   const statusOrder: Record<string, number> = { in_progress: 0, todo: 1, done: 2 };
 
-  const sortedTasks = [...tasks].sort((a, b) => {
+  const sortedTasks = useMemo(() => [...tasks].sort((a, b) => {
     const statusDiff = (statusOrder[a.status] ?? 2) - (statusOrder[b.status] ?? 2);
     if (statusDiff !== 0) return statusDiff;
     return (priorityOrder[a.priority] ?? 3) - (priorityOrder[b.priority] ?? 3);
-  });
+  }), [tasks]);
 
-  async function handleToggle(taskId: string, currentStatus: string) {
+  const handleToggle = useCallback(async function handleToggle(taskId: string, currentStatus: string) {
     const newStatus = (currentStatus === "done" ? "todo" : "done") as "todo" | "done";
 
     // Optimistic update
@@ -71,7 +71,7 @@ export default function DashboardTaskList({ tasks: initialTasks }: DashboardTask
     } else {
       router.refresh();
     }
-  }
+  }, [router]);
 
   return (
     <div

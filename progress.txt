@@ -1087,3 +1087,26 @@
   - The `statValues` object in StatsRow was recreated on every render — now memoized on the 4 stat props
   - Phase 5 (Performance & Accessibility) is now started — Tasks 25-30 remain
 ---
+
+## Iteration 43 - Task 25: useCallback for event handlers + Zustand/Context review
+- What was implemented:
+  - Wrapped `handleToggle` in `useCallback` in DashboardTaskList.tsx + added `useMemo` for `sortedTasks`
+  - Wrapped `handleStop` in `useCallback` in ActiveTimersStrip.tsx (was a plain function, now memoized with `[fetchTimers, router]` deps)
+  - Extracted 3 inline arrow functions in TimerDashboard.tsx into named `useCallback` hooks: `handleManualEntryCreated`, `handleCloseStartModal`, `handleCloseManualEntry`
+  - Memoized `SidebarContext.Provider` value with `useMemo` in AppShell.tsx (prevents re-renders of Sidebar/children on unrelated state changes)
+  - Extracted `handleCloseQuickAdd` and `handleCreated` from inline arrows in AppShell.tsx into `useCallback`
+  - Reviewed Zustand usage: codebase does NOT use Zustand — uses React Context API (WorkspaceContext, SyncContext, ToastContext). All context providers already use `useMemo` for their values and `useCallback` for methods. No granular selector issues.
+- Files changed:
+  - src/components/dashboard/DashboardTaskList.tsx (useCallback for handleToggle, useMemo for sortedTasks)
+  - src/components/dashboard/ActiveTimersStrip.tsx (useCallback for handleStop)
+  - src/components/timers/TimerDashboard.tsx (3 new useCallback hooks replacing inline arrows)
+  - src/components/layout/AppShell.tsx (useMemo for sidebarContextValue, useCallback for handleCloseQuickAdd + handleCreated)
+  - PRD.md (Task 25 marked complete)
+- All 60 tests pass, TypeScript check passes
+- Learnings for future iterations:
+  - Codebase uses React Context API, not Zustand — PRD references Zustand but it was never installed
+  - WorkspaceContext, SyncContext already follow best practices: useMemo for value, useCallback for methods
+  - Most list components (TaskList, NoteList, ProjectList, ClientList) already had useCallback from prior iterations
+  - The key gaps were: DashboardTaskList (handleToggle), ActiveTimersStrip (handleStop), and several inline arrows in TimerDashboard/AppShell
+  - useMemo for sortedTasks in DashboardTaskList prevents unnecessary re-sorts on re-renders
+---

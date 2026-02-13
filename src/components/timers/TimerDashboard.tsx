@@ -118,6 +118,18 @@ export default function TimerDashboard({
     router.refresh();
   }, [router]);
 
+  const handleManualEntryCreated = useCallback(() => {
+    router.refresh();
+  }, [router]);
+
+  const handleCloseStartModal = useCallback(() => {
+    setShowStartModal(false);
+  }, []);
+
+  const handleCloseManualEntry = useCallback(() => {
+    setShowManualEntry(false);
+  }, []);
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -322,7 +334,7 @@ export default function TimerDashboard({
       {showStartModal && (
         <StartTimerModal
           projects={projects}
-          onClose={() => setShowStartModal(false)}
+          onClose={handleCloseStartModal}
           onStarted={handleTimerStarted}
         />
       )}
@@ -331,8 +343,8 @@ export default function TimerDashboard({
       {showManualEntry && (
         <ManualEntryForm
           projects={projects}
-          onClose={() => setShowManualEntry(false)}
-          onCreated={() => router.refresh()}
+          onClose={handleCloseManualEntry}
+          onCreated={handleManualEntryCreated}
         />
       )}
     </div>

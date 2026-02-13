@@ -90,7 +90,7 @@ export default function ActiveTimersStrip() {
     return () => clearInterval(interval);
   }, [timers]);
 
-  async function handleStop(timerId: string) {
+  const handleStop = useCallback(async (timerId: string) => {
     setStopping((prev) => ({ ...prev, [timerId]: true }));
     // Optimistic remove
     setTimers((prev) => prev.filter((t) => t.id !== timerId));
@@ -102,7 +102,7 @@ export default function ActiveTimersStrip() {
       router.refresh();
     }
     setStopping((prev) => ({ ...prev, [timerId]: false }));
-  }
+  }, [fetchTimers, router]);
 
   if (!loaded) return null;
 

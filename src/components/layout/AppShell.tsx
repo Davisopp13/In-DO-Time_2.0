@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback, useEffect } from "react";
+import { createContext, useContext, useState, useCallback, useEffect, useMemo } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Sidebar from "./Sidebar";
 import TopBar from "./TopBar";
@@ -59,6 +59,19 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [openQuickAdd]);
 
+  const handleCloseQuickAdd = useCallback(() => {
+    setQuickAddOpen(false);
+  }, []);
+
+  const handleCreated = useCallback(() => {
+    router.refresh();
+  }, [router]);
+
+  const sidebarContextValue = useMemo(() => ({
+    collapsed,
+    toggleCollapsed
+  }), [collapsed, toggleCollapsed]);
+
   // Don't show shell on login/auth pages
   const isAuthPage =
     pathname.startsWith("/login") || pathname.startsWith("/auth");
@@ -68,7 +81,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <SidebarContext.Provider value={{ collapsed, toggleCollapsed }}>
+    <SidebarContext.Provider value={sidebarContextValue}>
       <div className="flex min-h-screen">
         <Sidebar />
 
@@ -92,8 +105,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         {/* Quick Add Modal */}
         <QuickAddTask
           open={quickAddOpen}
-          onClose={() => setQuickAddOpen(false)}
-          onCreated={() => router.refresh()}
+          onClose={handleCloseQuickAdd}
+          onCreated={handleCreated}
           projects={projects}
         />
       </div>
