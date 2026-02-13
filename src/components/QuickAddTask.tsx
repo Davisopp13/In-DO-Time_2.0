@@ -1,20 +1,22 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { createPortal } from "react-dom";
-import { X, ChevronDown, Calendar, Flag } from "lucide-react";
+import {
+  X,
+  Folder,
+  Calendar,
+  Flag,
+  Tag,
+  User,
+} from "lucide-react";
 import { createTask } from "@/actions/tasks";
 import { useToast } from "@/lib/toast";
 import { useWorkspace } from "@/lib/workspace";
 import { Z_INDEX } from "@/lib/constants";
+import { parseTaskInput } from "@/utils/parseTaskInput";
+import { buildProjectAliasMap } from "@/hooks/useProjectAliases";
 import type { ProjectWithClient } from "@/actions/projects";
-
-const PRIORITY_OPTIONS = [
-  { value: "p1", label: "P1", color: "#f87171" },
-  { value: "p2", label: "P2", color: "#fb923c" },
-  { value: "p3", label: "P3", color: "#fbbf24" },
-  { value: "p4", label: "P4", color: "#94a3b8" },
-];
 
 interface QuickAddTaskProps {
   open: boolean;
@@ -29,11 +31,7 @@ export default function QuickAddTask({
   onCreated,
   projects,
 }: QuickAddTaskProps) {
-  const [title, setTitle] = useState("");
-  const [showAdvanced, setShowAdvanced] = useState(false);
-  const [priority, setPriority] = useState("p3");
-  const [projectId, setProjectId] = useState("");
-  const [dueDate, setDueDate] = useState("");
+  const [input, setInput] = useState("");
   const [saving, setSaving] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -43,9 +41,53 @@ export default function QuickAddTask({
   const { currentWorkspace } = useWorkspace();
 
   // Filter projects by current workspace
-  const workspaceProjects = projects.filter(
-    (p) => !currentWorkspace || p.workspace_id === currentWorkspace.id
+  const workspaceProjects = useMemo(
+    () =>
+      projects.filter(
+        (p) => !currentWorkspace || p.workspace_id === currentWorkspace.id
+      ),
+    [projects, currentWorkspace]
   );
+
+  // Build alias map from workspace projects
+  const projectAliases = useMemo(
+    () => buildProjectAliasMap(workspaceProjects),
+    [workspaceProjects]
+  );
+
+  // Live parse the input
+  const parsed = useMemo(
+    () => parseTaskInput(input, { projectAliases }),
+    [input, projectAliases]
+  );
+
+  // Resolve project name for display
+  const resolvedProjectName = useMemo(() => {
+    if (!parsed.project) return null;
+    const match = workspaceProjects.find((p) => p.id === parsed.project);
+    if (match) return match.name;
+    // If not resolved to an ID, show the raw name
+    return parsed.project;
+  }, [parsed.project, workspaceProjects]);
+
+  // Format due date for display
+  const formattedDate = useMemo(() => {
+    if (!parsed.due_date) return null;
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
+    const diff = Math.round(
+      (parsed.due_date.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
+    );
+    if (diff === 0) return "Today";
+    if (diff === 1) return "Tomorrow";
+    if (diff < 7 && diff > 0) {
+      return parsed.due_date.toLocaleDateString("en-US", { weekday: "long" });
+    }
+    return parsed.due_date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    });
+  }, [parsed.due_date]);
 
   useEffect(() => {
     setMounted(true);
@@ -53,11 +95,7 @@ export default function QuickAddTask({
 
   useEffect(() => {
     if (open) {
-      setTitle("");
-      setShowAdvanced(false);
-      setPriority("p3");
-      setProjectId("");
-      setDueDate("");
+      setInput("");
       setSaving(false);
       document.body.style.overflow = "hidden";
       requestAnimationFrame(() => {
@@ -75,7 +113,7 @@ export default function QuickAddTask({
     };
   }, [open]);
 
-  // Keyboard shortcut to close
+  // Escape to close
   useEffect(() => {
     if (!open) return;
     const handleKey = (e: KeyboardEvent) => {
@@ -88,20 +126,39 @@ export default function QuickAddTask({
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
-      if (!title.trim()) return;
+      const trimmedTitle = parsed.title.trim();
+      if (!trimmedTitle) return;
 
       setSaving(true);
       const formData = new FormData();
-      formData.set("title", title.trim());
-      formData.set("priority", priority);
-      if (projectId) formData.set("project_id", projectId);
-      if (dueDate) formData.set("due_date", dueDate);
+      formData.set("title", trimmedTitle);
+
+      // Map parsed priority to p1-p4
+      if (parsed.priority === "high") formData.set("priority", "p1");
+      else if (parsed.priority === "medium") formData.set("priority", "p2");
+      else if (parsed.priority === "low") formData.set("priority", "p4");
+      else formData.set("priority", "p3");
+
+      // Set project if resolved to an ID
+      if (parsed.project) {
+        const match = workspaceProjects.find((p) => p.id === parsed.project);
+        if (match) formData.set("project_id", match.id);
+      }
+
+      // Set due date
+      if (parsed.due_date) {
+        const y = parsed.due_date.getFullYear();
+        const m = String(parsed.due_date.getMonth() + 1).padStart(2, "0");
+        const d = String(parsed.due_date.getDate()).padStart(2, "0");
+        formData.set("due_date", `${y}-${m}-${d}`);
+      }
+
       formData.set("status", "todo");
 
       const result = await createTask(formData);
 
       if (result.success) {
-        showToast("success", "Task created", title.trim());
+        showToast("success", "Task created", trimmedTitle);
         onCreated?.();
         onClose();
       } else {
@@ -109,10 +166,17 @@ export default function QuickAddTask({
         setSaving(false);
       }
     },
-    [title, priority, projectId, dueDate, showToast, onCreated, onClose]
+    [parsed, workspaceProjects, showToast, onCreated, onClose]
   );
 
   if (!mounted || !open) return null;
+
+  const hasParsedContent =
+    resolvedProjectName ||
+    formattedDate ||
+    parsed.priority ||
+    parsed.tags.length > 0 ||
+    parsed.assignee;
 
   return createPortal(
     <div
@@ -133,9 +197,7 @@ export default function QuickAddTask({
       <div
         className="absolute bottom-0 left-0 right-0 sm:relative sm:top-1/4 sm:mx-auto sm:max-w-lg sm:bottom-auto transition-all duration-300 ease-out"
         style={{
-          transform: visible
-            ? "translateY(0)"
-            : "translateY(100%)",
+          transform: visible ? "translateY(0)" : "translateY(100%)",
         }}
       >
         <div
@@ -164,92 +226,98 @@ export default function QuickAddTask({
           </div>
 
           <form onSubmit={handleSubmit}>
-            {/* Title input */}
+            {/* Text input */}
             <input
               ref={inputRef}
               type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
               placeholder="What needs to be done?"
               className="w-full px-4 py-3 rounded-xl bg-[var(--surface)] border border-[var(--border)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] text-base"
               autoComplete="off"
             />
 
-            {/* Quick options bar */}
-            <div className="flex items-center gap-2 mt-3 flex-wrap">
-              {/* Priority pills */}
-              {PRIORITY_OPTIONS.map((p) => (
-                <button
-                  key={p.value}
-                  type="button"
-                  onClick={() => setPriority(p.value)}
-                  className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium transition-all min-h-[32px] ${
-                    priority === p.value
-                      ? "border-2 border-[var(--accent)] bg-[var(--accent-muted)] text-[var(--text-primary)]"
-                      : "border border-[var(--border)] text-[var(--text-muted)] hover:border-[var(--border-hover)]"
-                  }`}
-                >
-                  <div
-                    className="w-2 h-2 rounded-full"
-                    style={{ backgroundColor: p.color }}
-                  />
-                  {p.label}
-                </button>
-              ))}
+            {/* Syntax hints */}
+            <p className="mt-2 text-[11px] text-[var(--text-muted)] leading-relaxed">
+              Try: <span className="text-[var(--text-secondary)]">@project</span>{" "}
+              <span className="text-[var(--text-secondary)]">#tag</span>{" "}
+              <span className="text-[var(--text-secondary)]">tomorrow</span>{" "}
+              <span className="text-[var(--text-secondary)]">!!</span>{" "}
+              <span className="text-[var(--text-secondary)]">+assignee</span>
+            </p>
 
-              {/* Toggle advanced */}
-              <button
-                type="button"
-                onClick={() => setShowAdvanced(!showAdvanced)}
-                className="ml-auto flex items-center gap-1 px-2 py-1 rounded-full text-[11px] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
-              >
-                More
-                <ChevronDown
-                  size={12}
-                  className={`transition-transform duration-200 ${
-                    showAdvanced ? "rotate-180" : ""
-                  }`}
-                />
-              </button>
-            </div>
+            {/* Live parsing preview */}
+            {input.trim() && (
+              <div className="mt-3 p-3 rounded-xl bg-[var(--surface-hover)] border border-[var(--border)] space-y-2">
+                {/* Parsed title */}
+                {parsed.title && (
+                  <p className="text-sm font-medium text-[var(--text-primary)]">
+                    {parsed.title}
+                  </p>
+                )}
 
-            {/* Advanced options (collapsible) */}
-            {showAdvanced && (
-              <div className="mt-3 space-y-3 animate-in fade-in slide-in-from-top-2 duration-200">
-                {/* Project */}
-                <div className="flex items-center gap-2">
-                  <Flag size={14} className="text-[var(--text-muted)] flex-shrink-0" />
-                  <select
-                    value={projectId}
-                    onChange={(e) => setProjectId(e.target.value)}
-                    className="flex-1 px-3 py-2 rounded-xl bg-[var(--surface)] border border-[var(--border)] text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent)]"
-                  >
-                    <option value="">No project</option>
-                    {workspaceProjects.map((project) => (
-                      <option key={project.id} value={project.id}>
-                        {project.name}
-                      </option>
+                {/* Badges */}
+                {hasParsedContent && (
+                  <div className="flex flex-wrap gap-1.5">
+                    {/* Project badge */}
+                    {resolvedProjectName && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-blue-500/15 text-blue-400 border border-blue-500/20">
+                        <Folder size={11} />
+                        {resolvedProjectName}
+                      </span>
+                    )}
+
+                    {/* Due date badge */}
+                    {formattedDate && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-green-500/15 text-green-400 border border-green-500/20">
+                        <Calendar size={11} />
+                        {formattedDate}
+                      </span>
+                    )}
+
+                    {/* Priority badge */}
+                    {parsed.priority && (
+                      <span
+                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium border ${
+                          parsed.priority === "high"
+                            ? "bg-red-500/15 text-red-400 border-red-500/20"
+                            : parsed.priority === "medium"
+                              ? "bg-orange-500/15 text-orange-400 border-orange-500/20"
+                              : "bg-slate-500/15 text-slate-400 border-slate-500/20"
+                        }`}
+                      >
+                        <Flag size={11} />
+                        {parsed.priority}
+                      </span>
+                    )}
+
+                    {/* Tag badges */}
+                    {parsed.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-[var(--accent-muted)] text-[var(--accent)] border border-[var(--accent)]/20"
+                      >
+                        <Tag size={11} />
+                        #{tag}
+                      </span>
                     ))}
-                  </select>
-                </div>
 
-                {/* Due date */}
-                <div className="flex items-center gap-2">
-                  <Calendar size={14} className="text-[var(--text-muted)] flex-shrink-0" />
-                  <input
-                    type="date"
-                    value={dueDate}
-                    onChange={(e) => setDueDate(e.target.value)}
-                    className="flex-1 px-3 py-2 rounded-xl bg-[var(--surface)] border border-[var(--border)] text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent)]"
-                  />
-                </div>
+                    {/* Assignee badge */}
+                    {parsed.assignee && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-purple-500/15 text-purple-400 border border-purple-500/20">
+                        <User size={11} />
+                        {parsed.assignee}
+                      </span>
+                    )}
+                  </div>
+                )}
               </div>
             )}
 
             {/* Submit */}
             <button
               type="submit"
-              disabled={!title.trim() || saving}
+              disabled={!parsed.title.trim() || saving}
               className="w-full mt-4 py-3 px-4 rounded-full bg-[var(--accent)] text-white font-semibold text-sm hover:bg-[var(--accent-hover)] disabled:opacity-40 disabled:cursor-not-allowed transition-all min-h-[44px]"
             >
               {saving ? "Creating..." : "Add Task"}

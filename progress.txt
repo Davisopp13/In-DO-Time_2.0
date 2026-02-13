@@ -965,3 +965,29 @@
   - AppShell already imports FAB and QuickAddTask with quickAddOpen state management
   - Tasks 13-15 may also be partially done — check existing code before implementing
 ---
+
+## Iteration 37 - Task 13: QuickAddTask with live parsing preview
+- What was implemented:
+  - Rewrote QuickAddTask.tsx to use smart parsing instead of manual form fields
+  - Single text input with natural language parsing via parseTaskInput + buildProjectAliasMap
+  - Syntax hint text below input: "@project #tag tomorrow !! +assignee"
+  - Live parsing preview panel (visible when input non-empty):
+    - Parsed title displayed as heading
+    - Project badge (Folder icon, blue) — resolves alias to project name
+    - Due date badge (Calendar icon, green) — smart formatting (Today/Tomorrow/weekday/date)
+    - Priority badge (Flag icon) — red for high, orange for medium, slate for low
+    - Tag badges (Tag icon, accent color) — one per #tag
+    - Assignee badge (User icon, purple)
+  - Submit maps parsed fields to FormData: priority → p1-p4, project → project_id, due_date → YYYY-MM-DD
+  - Removed old priority pills, project dropdown, date picker, and "More" toggle
+  - Kept: portal rendering, modal animation, escape key close, backdrop, safe-area padding
+- Files changed:
+  - src/components/QuickAddTask.tsx (full rewrite with parsing integration)
+  - PRD.md (Task 13 marked complete)
+- All 60 tests pass, TypeScript check passes
+- Learnings for future iterations:
+  - Priority mapping: parsed "high" → p1, "medium" → p2, "low" → p4, null → p3 (default)
+  - Project resolution: buildProjectAliasMap maps alias → project ID, then we find project name by ID for display
+  - Date formatting: diff-based smart labels (Today/Tomorrow/weekday name/Mon DD)
+  - The submit button is disabled when parsed.title is empty (all input was modifiers)
+---
