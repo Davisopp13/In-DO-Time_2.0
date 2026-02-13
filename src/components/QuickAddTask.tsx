@@ -10,12 +10,12 @@ import {
   Tag,
   User,
 } from "lucide-react";
-import { createTask } from "@/actions/tasks";
 import { useToast } from "@/lib/toast";
 import { useWorkspace } from "@/lib/workspace";
 import { Z_INDEX } from "@/lib/constants";
 import { parseTaskInput } from "@/utils/parseTaskInput";
 import { buildProjectAliasMap } from "@/hooks/useProjectAliases";
+import { useOptimisticTasks } from "@/hooks/useOptimisticTask";
 import type { ProjectWithClient } from "@/actions/projects";
 
 interface QuickAddTaskProps {
@@ -39,6 +39,7 @@ export default function QuickAddTask({
   const inputRef = useRef<HTMLInputElement>(null);
   const { showToast } = useToast();
   const { currentWorkspace } = useWorkspace();
+  const { optimisticCreate } = useOptimisticTasks({ initialTasks: [] });
 
   // Filter projects by current workspace
   const workspaceProjects = useMemo(
@@ -130,32 +131,36 @@ export default function QuickAddTask({
       if (!trimmedTitle) return;
 
       setSaving(true);
-      const formData = new FormData();
-      formData.set("title", trimmedTitle);
 
       // Map parsed priority to p1-p4
-      if (parsed.priority === "high") formData.set("priority", "p1");
-      else if (parsed.priority === "medium") formData.set("priority", "p2");
-      else if (parsed.priority === "low") formData.set("priority", "p4");
-      else formData.set("priority", "p3");
+      let priority = "p3";
+      if (parsed.priority === "high") priority = "p1";
+      else if (parsed.priority === "medium") priority = "p2";
+      else if (parsed.priority === "low") priority = "p4";
 
-      // Set project if resolved to an ID
+      // Resolve project ID
+      let project_id: string | undefined;
       if (parsed.project) {
         const match = workspaceProjects.find((p) => p.id === parsed.project);
-        if (match) formData.set("project_id", match.id);
+        if (match) project_id = match.id;
       }
 
-      // Set due date
+      // Format due date
+      let due_date: string | undefined;
       if (parsed.due_date) {
         const y = parsed.due_date.getFullYear();
         const m = String(parsed.due_date.getMonth() + 1).padStart(2, "0");
         const d = String(parsed.due_date.getDate()).padStart(2, "0");
-        formData.set("due_date", `${y}-${m}-${d}`);
+        due_date = `${y}-${m}-${d}`;
       }
 
-      formData.set("status", "todo");
-
-      const result = await createTask(formData);
+      const result = await optimisticCreate({
+        title: trimmedTitle,
+        priority,
+        project_id,
+        due_date,
+        status: "todo",
+      });
 
       if (result.success) {
         showToast("success", "Task created", trimmedTitle);
@@ -166,7 +171,7 @@ export default function QuickAddTask({
         setSaving(false);
       }
     },
-    [parsed, workspaceProjects, showToast, onCreated, onClose]
+    [parsed, workspaceProjects, showToast, onCreated, onClose, optimisticCreate]
   );
 
   if (!mounted || !open) return null;

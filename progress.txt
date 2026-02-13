@@ -1043,3 +1043,24 @@
   - useOfflineQueue breaks on first failure to preserve mutation order — important for data consistency
   - SyncStatus uses Cloud icon instead of Check (PRD said Check) — functionally equivalent, Cloud is more contextual
 ---
+
+## Iteration 41 - Task 23: QuickAddTask uses useOptimisticTask for task creation
+- What was implemented:
+  - Added `optimisticCreate` method to `useOptimisticTasks` hook in `hooks/useOptimisticTask.ts`
+  - Added `OptimisticCreateData` interface (title, priority, project_id, due_date, status)
+  - `optimisticCreate`: when online → builds FormData and calls `createTask` server action; when offline → queues mutation to IndexedDB via `useOfflineQueue` and returns success immediately
+  - Added `create` action handler to `processMutation` so queued creates are flushed when back online
+  - Updated `QuickAddTask.tsx` to import `useOptimisticTasks` instead of `createTask` directly
+  - `handleSubmit` now calls `optimisticCreate({...})` instead of building FormData manually
+  - Removed direct `createTask` import from QuickAddTask
+- Files changed:
+  - src/hooks/useOptimisticTask.ts (added optimisticCreate, OptimisticCreateData, create handler in processMutation)
+  - src/components/QuickAddTask.tsx (replaced createTask with optimisticCreate from useOptimisticTasks)
+  - PRD.md (Task 23 marked complete)
+- All 60 tests pass, TypeScript check passes
+- Learnings for future iterations:
+  - QuickAddTask doesn't need a task list — uses `useOptimisticTasks({ initialTasks: [] })` since it only needs the `optimisticCreate` function
+  - Phase 4 (Sync System) is now fully complete — Tasks 16-23 all done
+  - Phase 5 (Performance & Accessibility, Tasks 24-30) is next
+  - The `next build` fails due to Node.js 24 + Next.js 14 compatibility — pre-existing issue, not related to code changes
+---

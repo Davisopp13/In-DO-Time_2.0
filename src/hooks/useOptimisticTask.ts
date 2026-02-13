@@ -1,10 +1,18 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
-import { toggleTaskStatus, updateTaskStatus, deleteTask } from "@/actions/tasks";
+import { createTask, toggleTaskStatus, updateTaskStatus, deleteTask } from "@/actions/tasks";
 import type { TaskWithProject } from "@/actions/tasks";
 import { useOfflineQueue, type QueuedMutation } from "./useOfflineQueue";
 import { useOnlineStatus } from "./useOnlineStatus";
+
+export interface OptimisticCreateData {
+  title: string;
+  priority?: string;
+  project_id?: string;
+  due_date?: string;
+  status?: string;
+}
 
 interface UseOptimisticTasksOptions {
   initialTasks: TaskWithProject[];
@@ -29,6 +37,16 @@ export function useOptimisticTasks({
   const processMutation = useCallback(
     async (mutation: QueuedMutation): Promise<boolean> => {
       try {
+        if (mutation.action === "create") {
+          const formData = new FormData();
+          formData.set("title", mutation.payload.title);
+          formData.set("priority", mutation.payload.priority || "p3");
+          formData.set("status", mutation.payload.status || "todo");
+          if (mutation.payload.project_id) formData.set("project_id", mutation.payload.project_id);
+          if (mutation.payload.due_date) formData.set("due_date", mutation.payload.due_date);
+          const result = await createTask(formData);
+          return result.success;
+        }
         if (mutation.action === "update" && mutation.payload.status) {
           const result = await updateTaskStatus(
             mutation.payload.id,
@@ -120,10 +138,41 @@ export function useOptimisticTasks({
     [isOnline, tasks, enqueue]
   );
 
+  // Optimistic create
+  const optimisticCreate = useCallback(
+    async (data: OptimisticCreateData): Promise<{ success: boolean; error?: string }> => {
+      if (isOnline) {
+        const formData = new FormData();
+        formData.set("title", data.title);
+        formData.set("priority", data.priority || "p3");
+        formData.set("status", data.status || "todo");
+        if (data.project_id) formData.set("project_id", data.project_id);
+        if (data.due_date) formData.set("due_date", data.due_date);
+        return await createTask(formData);
+      } else {
+        // Queue for later sync
+        await enqueue({
+          table: "tasks",
+          action: "create",
+          payload: {
+            title: data.title,
+            priority: data.priority || "p3",
+            status: data.status || "todo",
+            project_id: data.project_id || null,
+            due_date: data.due_date || null,
+          },
+        });
+        return { success: true };
+      }
+    },
+    [isOnline, enqueue]
+  );
+
   return {
     tasks,
     optimisticToggle,
     optimisticDelete,
+    optimisticCreate,
     pendingCount,
   };
 }
