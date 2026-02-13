@@ -100,7 +100,7 @@ export default function NoteCard({ note, onEdit, onDelete, onTogglePin }: NoteCa
               e.stopPropagation();
               onTogglePin(note.id, note.pinned);
             }}
-            className={`p-2 md:p-1.5 rounded-lg hover:bg-[var(--surface-hover)] transition-colors ${
+            className={`min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-[var(--surface-hover)] transition-colors ${
               note.pinned ? "text-[var(--accent)]" : "text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
             }`}
             title={note.pinned ? "Unpin" : "Pin"}
@@ -112,7 +112,7 @@ export default function NoteCard({ note, onEdit, onDelete, onTogglePin }: NoteCa
               e.stopPropagation();
               onEdit(note);
             }}
-            className="p-2 md:p-1.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-secondary)] hover:bg-[var(--surface-hover)] transition-colors"
+            className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg text-[var(--text-muted)] hover:text-[var(--text-secondary)] hover:bg-[var(--surface-hover)] transition-colors"
             title="Edit"
           >
             <Pencil size={14} />
@@ -122,7 +122,7 @@ export default function NoteCard({ note, onEdit, onDelete, onTogglePin }: NoteCa
               e.stopPropagation();
               onDelete(note.id);
             }}
-            className="p-2 md:p-1.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--danger)] hover:bg-[var(--surface-hover)] transition-colors"
+            className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg text-[var(--text-muted)] hover:text-[var(--danger)] hover:bg-[var(--surface-hover)] transition-colors"
             title="Delete"
           >
             <Trash2 size={14} />

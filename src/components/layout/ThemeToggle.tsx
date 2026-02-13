@@ -33,8 +33,8 @@ export default function ThemeToggle({ collapsed = false }: ThemeToggleProps) {
   return (
     <button
       onClick={toggleTheme}
-      className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)] transition-colors ${
-        collapsed ? "justify-center" : ""
+      className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)] transition-colors min-h-[44px] ${
+        collapsed ? "justify-center min-w-[44px]" : ""
       }`}
       title={collapsed ? `Switch to ${isDark ? "light" : "dark"} mode` : undefined}
       aria-label={`Currently ${isDark ? "dark" : "light"} mode. Switch to ${isDark ? "light" : "dark"} mode`}

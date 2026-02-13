@@ -82,7 +82,7 @@ export default function DateRangePicker({ startDate, endDate, onRangeChange }: D
       <div className="relative">
         <button
           onClick={() => setShowDropdown(!showDropdown)}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium"
+          className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium min-h-[44px]"
           style={{
             background: "var(--surface)",
             border: "1px solid var(--border)",
@@ -110,7 +110,7 @@ export default function DateRangePicker({ startDate, endDate, onRangeChange }: D
                 <button
                   key={p.value}
                   onClick={() => handlePresetClick(p.value)}
-                  className="w-full text-left px-4 py-2.5 text-sm"
+                  className="w-full text-left px-4 py-2.5 text-sm min-h-[44px]"
                   style={{
                     color: preset === p.value ? "var(--accent)" : "var(--text-primary)",
                     background: preset === p.value ? "var(--accent-muted)" : "transparent",
@@ -139,7 +139,7 @@ export default function DateRangePicker({ startDate, endDate, onRangeChange }: D
             setPreset("custom");
             onRangeChange(e.target.value, endDate);
           }}
-          className="px-3 py-2 rounded-xl text-sm"
+          className="px-3 py-2 rounded-xl text-sm min-h-[44px]"
           style={{
             background: "var(--surface)",
             border: "1px solid var(--border)",
@@ -155,7 +155,7 @@ export default function DateRangePicker({ startDate, endDate, onRangeChange }: D
             setPreset("custom");
             onRangeChange(startDate, e.target.value);
           }}
-          className="px-3 py-2 rounded-xl text-sm"
+          className="px-3 py-2 rounded-xl text-sm min-h-[44px]"
           style={{
             background: "var(--surface)",
             border: "1px solid var(--border)",

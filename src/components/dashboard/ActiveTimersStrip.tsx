@@ -125,7 +125,7 @@ export default function ActiveTimersStrip() {
           </p>
           <Link
             href="/timers"
-            className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-white"
+            className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-white min-h-[44px]"
             style={{ background: "var(--accent)" }}
           >
             <Plus size={16} />
@@ -196,7 +196,7 @@ export default function ActiveTimersStrip() {
                   <button
                     onClick={() => handleStop(timer.id)}
                     disabled={stopping[timer.id]}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium disabled:opacity-50"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium disabled:opacity-50 min-h-[44px]"
                     style={{ background: "var(--danger)", color: "#fff" }}
                     title="Stop timer"
                   >
@@ -205,7 +205,7 @@ export default function ActiveTimersStrip() {
                   </button>
                   <Link
                     href="/timers"
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium min-h-[44px]"
                     style={{
                       background: "var(--surface-hover)",
                       border: "1px solid var(--border)",

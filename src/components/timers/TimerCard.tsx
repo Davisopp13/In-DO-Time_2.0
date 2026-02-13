@@ -153,7 +153,7 @@ export default function TimerCard({
             <button
               onClick={handleResume}
               disabled={loading}
-              className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-white disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-white disabled:opacity-50 min-h-[44px]"
               style={{ background: "var(--accent)" }}
               title="Resume timer"
             >
@@ -164,7 +164,7 @@ export default function TimerCard({
             <button
               onClick={handlePause}
               disabled={loading || !isRunning}
-              className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium disabled:opacity-50 min-h-[44px]"
               style={{
                 background: "var(--surface-hover)",
                 border: "1px solid var(--border)",
@@ -179,7 +179,7 @@ export default function TimerCard({
           <button
             onClick={handleStop}
             disabled={loading || timerState === "stopped"}
-            className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium disabled:opacity-50 min-h-[44px]"
             style={{
               background: "var(--danger)",
               color: "#fff",

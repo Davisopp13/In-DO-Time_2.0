@@ -55,10 +55,10 @@ export default function TaskRow({ task, onToggle, onEdit, onDelete }: TaskRowPro
       }`}
       onClick={() => onEdit(task)}
     >
-      {/* Checkbox — padded for 44px touch target */}
+      {/* Checkbox — 44px touch target */}
       <button
         onClick={(e) => { e.stopPropagation(); onToggle(task.id, task.status); }}
-        className="flex-shrink-0 flex items-center justify-center w-8 h-8 -m-1"
+        className="flex-shrink-0 flex items-center justify-center w-11 h-11 -m-1.5"
       >
         <span className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${
           isDone
@@ -121,14 +121,14 @@ export default function TaskRow({ task, onToggle, onEdit, onDelete }: TaskRowPro
       <div className="flex-shrink-0 flex items-center gap-1 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
         <button
           onClick={(e) => { e.stopPropagation(); onEdit(task); }}
-          className="p-2 md:p-1.5 rounded-lg hover:bg-[var(--surface-hover)] text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+          className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-[var(--surface-hover)] text-[var(--text-muted)] hover:text-[var(--text-primary)]"
           title="Edit task"
         >
           <Pencil size={14} />
         </button>
         <button
           onClick={(e) => { e.stopPropagation(); onDelete(task.id); }}
-          className="p-2 md:p-1.5 rounded-lg hover:bg-[var(--surface-hover)] text-[var(--text-muted)] hover:text-[var(--danger)]"
+          className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-[var(--surface-hover)] text-[var(--text-muted)] hover:text-[var(--danger)]"
           title="Delete task"
         >
           <Trash2 size={14} />

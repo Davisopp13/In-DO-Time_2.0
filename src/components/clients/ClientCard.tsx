@@ -42,7 +42,7 @@ export default function ClientCard({ client, onEdit, onArchive, onRestore }: Cli
         <div className="flex items-center gap-1 flex-shrink-0">
           <button
             onClick={() => onEdit(client)}
-            className="p-1.5 rounded-lg hover:bg-[var(--surface-hover)] text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+            className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-[var(--surface-hover)] text-[var(--text-muted)] hover:text-[var(--text-primary)]"
             title="Edit"
           >
             <Pencil size={14} />
@@ -50,7 +50,7 @@ export default function ClientCard({ client, onEdit, onArchive, onRestore }: Cli
           {isArchived ? (
             <button
               onClick={() => onRestore(client.id)}
-              className="p-1.5 rounded-lg hover:bg-[var(--surface-hover)] text-[var(--text-muted)] hover:text-[var(--accent)]"
+              className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-[var(--surface-hover)] text-[var(--text-muted)] hover:text-[var(--accent)]"
               title="Restore"
             >
               <ArchiveRestore size={14} />
@@ -58,7 +58,7 @@ export default function ClientCard({ client, onEdit, onArchive, onRestore }: Cli
           ) : (
             <button
               onClick={() => onArchive(client.id)}
-              className="p-1.5 rounded-lg hover:bg-[var(--surface-hover)] text-[var(--text-muted)] hover:text-[var(--danger)]"
+              className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-[var(--surface-hover)] text-[var(--text-muted)] hover:text-[var(--danger)]"
               title="Archive"
             >
               <Archive size={14} />

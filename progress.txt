@@ -1159,3 +1159,38 @@
   - The compact inline design (py-16, max-w-xs text) is better for section-level boundaries than full-page takeovers
   - getDerivedStateFromError returns new state synchronously, componentDidCatch logs asynchronously — both needed
 ---
+
+## Iteration 46 - Task 28: Audit and fix 44×44px touch targets
+- What was implemented:
+  - Audited all interactive elements across 30+ components for WCAG minimum 44×44px touch targets
+  - Fixed 10 components with undersized touch targets:
+    - SyncStatus.tsx: `min-h-[32px]` → `min-h-[44px]`, increased padding `px-2 py-1` → `px-3 py-2`
+    - ProjectCard.tsx: Icon buttons from `p-2` (32×32px) → `min-w-[44px] min-h-[44px]` with flex centering
+    - NoteCard.tsx: Action buttons from `p-2 md:p-1.5` → `min-w-[44px] min-h-[44px]` consistent across breakpoints
+    - ClientCard.tsx: Icon buttons from `p-1.5` (28×28px) → `min-w-[44px] min-h-[44px]`
+    - DateRangePicker.tsx: Dropdown button + items + date inputs all got `min-h-[44px]`
+    - TimerCard.tsx: Play/Pause/Stop buttons got `min-h-[44px]`
+    - ActiveTimersStrip.tsx: Stop + Manage buttons + Start Timer link got `min-h-[44px]`
+    - ThemeToggle.tsx: Added `min-h-[44px]`, `min-w-[44px]` when collapsed
+    - TaskRow.tsx: Checkbox `w-8 h-8` (32px) → `w-11 h-11` (44px), edit/delete → `min-w-[44px] min-h-[44px]`
+    - DashboardTaskList.tsx: Checkbox same fix as TaskRow
+- Files changed:
+  - src/components/SyncStatus.tsx
+  - src/components/projects/ProjectCard.tsx
+  - src/components/notes/NoteCard.tsx
+  - src/components/clients/ClientCard.tsx
+  - src/components/reports/DateRangePicker.tsx
+  - src/components/timers/TimerCard.tsx
+  - src/components/dashboard/ActiveTimersStrip.tsx
+  - src/components/layout/ThemeToggle.tsx
+  - src/components/tasks/TaskRow.tsx
+  - src/components/dashboard/DashboardTaskList.tsx
+  - PRD.md (Task 28 marked complete)
+- All 60 tests pass, TypeScript check passes
+- Learnings for future iterations:
+  - `min-w-[44px] min-h-[44px]` with `flex items-center justify-center` is the cleanest pattern for icon-only buttons
+  - For text buttons, `min-h-[44px]` alone is sufficient since text width naturally exceeds 44px
+  - `w-11 h-11` = 44px in Tailwind (11 × 4px = 44px) — use with negative margin `-m-1.5` to keep visual alignment
+  - Components that already pass: FAB (56px), MobileNav (44px explicit), QuickAddTask submit, ErrorBoundary retry, Sidebar nav links
+  - Desktop-only breakpoint overrides (md:p-1.5) should be avoided for touch targets — desktop mice still benefit from larger click areas
+---

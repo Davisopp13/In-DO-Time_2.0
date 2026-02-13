@@ -106,10 +106,10 @@ export default function DashboardTaskList({ tasks: initialTasks }: DashboardTask
                   isDone ? "opacity-50" : ""
                 }`}
               >
-                {/* Checkbox — padded for 44px touch target */}
+                {/* Checkbox — 44px touch target */}
                 <button
                   onClick={() => handleToggle(task.id, task.status)}
-                  className="flex-shrink-0 flex items-center justify-center w-8 h-8 -m-1"
+                  className="flex-shrink-0 flex items-center justify-center w-11 h-11 -m-1.5"
                 >
                   <span className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${
                     isDone

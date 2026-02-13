@@ -78,7 +78,7 @@ export default function ProjectCard({ project, taskCounts, onEdit, onArchive, on
           <div className="flex items-center gap-1 flex-shrink-0 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
             <button
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); onEdit(project); }}
-              className="p-2 rounded-lg hover:bg-[var(--surface-hover)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-all"
+              className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-[var(--surface-hover)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-all"
               title="Edit"
             >
               <Pencil size={14} />
@@ -86,7 +86,7 @@ export default function ProjectCard({ project, taskCounts, onEdit, onArchive, on
             {isCompleted ? (
               <button
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); onRestore(project.id); }}
-                className="p-2 rounded-lg hover:bg-[var(--surface-hover)] text-[var(--text-muted)] hover:text-[var(--accent)] transition-all"
+                className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-[var(--surface-hover)] text-[var(--text-muted)] hover:text-[var(--accent)] transition-all"
                 title="Restore"
               >
                 <ArchiveRestore size={14} />
@@ -94,7 +94,7 @@ export default function ProjectCard({ project, taskCounts, onEdit, onArchive, on
             ) : (
               <button
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); onArchive(project.id); }}
-                className="p-2 rounded-lg hover:bg-[var(--surface-hover)] text-[var(--text-muted)] hover:text-[var(--danger)] transition-all"
+                className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-[var(--surface-hover)] text-[var(--text-muted)] hover:text-[var(--danger)] transition-all"
                 title="Archive"
               >
                 <Archive size={14} />
