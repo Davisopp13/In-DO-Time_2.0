@@ -1006,3 +1006,19 @@
   - Many Phase 3 tasks were already implemented in prior iterations but not tracked in PRD.md
   - Task 15 (wire FAB into layout) is also already done — AppShell has FAB + QuickAddTask wired
 ---
+
+## Iteration 39 - Task 15: FAB wired into main layout (already implemented)
+- What was implemented:
+  - Verified FAB is already wired into AppShell.tsx (line 90)
+  - FAB renders on all authenticated pages (AppShell wraps everything except /login and /auth)
+  - Click triggers openQuickAdd() which lazy-fetches projects then opens QuickAddTask
+  - FAB positioning uses safe-area-aware bottom: max(5.5rem, calc(4.5rem + env(safe-area-inset-bottom))) — clears MobileNav
+  - QuickAddTask uses safe-area-inset-bottom padding — handles mobile keyboard
+  - No code changes needed — just marked task complete
+- Files changed:
+  - PRD.md (Task 15 marked complete)
+- All 60 tests pass, TypeScript check passes
+- Learnings for future iterations:
+  - Phase 3 (Quick Add UI) is now fully complete — Tasks 12-15 all done
+  - Phase 4 (Sync System) is next — starts with Task 16 (useOnlineStatus hook)
+---
