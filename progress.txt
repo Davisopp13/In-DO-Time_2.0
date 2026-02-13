@@ -948,3 +948,20 @@
   - When alias is not found, parseTaskInput falls back to the raw captured name (not lowercased) — this is intentional so unknown project references preserve original casing
   - Phase 2 (Smart Parsing Foundation) is now fully complete — Tasks 7-11 all done
 ---
+
+## Iteration 36 - Task 12: FAB component polish
+- What was implemented:
+  - FAB.tsx already existed from a prior iteration — updated to match PRD spec exactly
+  - Changed hover:scale-105 → hover:scale-110 per PRD
+  - Removed md:hidden so FAB is visible on all viewports (not just mobile)
+  - Added duration-150 ease-out for transition timing per PRD
+  - FAB already wired into AppShell with QuickAddTask from prior work
+- Files changed:
+  - src/components/FAB.tsx (scale, visibility, transition timing)
+  - PRD.md (Task 12 marked complete)
+- All 60 tests pass, TypeScript check passes
+- Learnings for future iterations:
+  - FAB, QuickAddTask, and keyboard shortcut (Cmd+K) were partially implemented in prior iterations
+  - AppShell already imports FAB and QuickAddTask with quickAddOpen state management
+  - Tasks 13-15 may also be partially done — check existing code before implementing
+---
