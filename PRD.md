@@ -72,13 +72,13 @@ popover: 60, toast: 70, tooltip: 80
 
 ## Phase 4: Sync System (Tasks 16-23)
 
-- [ ] **Task 16:** Create `hooks/useOnlineStatus.ts` — track `navigator.onLine`, listen to window `online`/`offline` events, return boolean. Handle SSR.
-- [ ] **Task 17:** Create `hooks/useSync.ts` — manages sync state: `status` ('synced' | 'syncing' | 'offline' | 'error'), `lastSynced` (Date | null). Auto-sync on window `focus` event. Auto-sync every 45 seconds when online. Expose: `syncNow()`, `status`, `lastSynced`, `pendingChanges` (count from offline queue), `isOnline`.
-- [ ] **Task 18:** Create `hooks/useRealtimeSync.ts` — subscribe to Supabase `postgres_changes` on `tasks` table filtered by `workspace_id`. Handle INSERT → add to Zustand store, UPDATE → update in store, DELETE → remove from store. Clean up channel on unmount or workspace change.
-- [ ] **Task 19:** Install `idb` package: `npm install idb`.
-- [ ] **Task 20:** Create `hooks/useOfflineQueue.ts` — open IndexedDB database `InDoTimeQueue` with object store `queue` (keyPath: `id`). `addToQueue(item)`: stores mutation with `id`, `action`, `table`, `data`, `timestamp`. `flushQueue()`: processes all items in order, removes successful ones, retries failed. Auto-flush triggered by `online` event from useOnlineStatus.
-- [ ] **Task 21:** Create `hooks/useOptimisticTask.ts` — `createTask`: add to Zustand with temp ID immediately, insert into Supabase, on success replace temp ID with real ID, on failure add to offline queue. Same pattern for `updateTask` and `deleteTask`. Last-write-wins for conflicts.
-- [ ] **Task 22:** Create `components/SyncStatus.tsx` — compact header indicator. Synced: green Check icon. Syncing: blue RefreshCw with animate-spin. Offline: gray CloudOff + pending count text. Error: red AlertCircle. Add this component to the app header.
+- [x] **Task 16:** Create `hooks/useOnlineStatus.ts` — track `navigator.onLine`, listen to window `online`/`offline` events, return boolean. Handle SSR.
+- [x] **Task 17:** Create `hooks/useSync.ts` — manages sync state: `status` ('synced' | 'syncing' | 'offline' | 'error'), `lastSynced` (Date | null). Auto-sync on window `focus` event. Auto-sync every 45 seconds when online. Expose: `syncNow()`, `status`, `lastSynced`, `pendingChanges` (count from offline queue), `isOnline`.
+- [x] **Task 18:** Create `hooks/useRealtimeSync.ts` — subscribe to Supabase `postgres_changes` on `tasks` table filtered by `workspace_id`. Handle INSERT → add to Zustand store, UPDATE → update in store, DELETE → remove from store. Clean up channel on unmount or workspace change.
+- [x] **Task 19:** Install `idb` package: `npm install idb`.
+- [x] **Task 20:** Create `hooks/useOfflineQueue.ts` — open IndexedDB database `InDoTimeQueue` with object store `queue` (keyPath: `id`). `addToQueue(item)`: stores mutation with `id`, `action`, `table`, `data`, `timestamp`. `flushQueue()`: processes all items in order, removes successful ones, retries failed. Auto-flush triggered by `online` event from useOnlineStatus.
+- [x] **Task 21:** Create `hooks/useOptimisticTask.ts` — `createTask`: add to Zustand with temp ID immediately, insert into Supabase, on success replace temp ID with real ID, on failure add to offline queue. Same pattern for `updateTask` and `deleteTask`. Last-write-wins for conflicts.
+- [x] **Task 22:** Create `components/SyncStatus.tsx` — compact header indicator. Synced: green Check icon. Syncing: blue RefreshCw with animate-spin. Offline: gray CloudOff + pending count text. Error: red AlertCircle. Add this component to the app header.
 - [ ] **Task 23:** Update `QuickAddTask` component to use `useOptimisticTask` for task creation instead of direct Supabase calls.
 
 ## Phase 5: Performance & Accessibility (Tasks 24-30)
