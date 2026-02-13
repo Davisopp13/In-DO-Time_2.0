@@ -932,3 +932,19 @@
   - Node 24 + vitest 4.0.18 has tinyglobby/picomatch compatibility issue — fixed by installing picomatch@latest at top level
   - picomatch added to package.json dependencies (hoisted version resolves the nested tinyglobby dep issue)
 ---
+
+## Iteration 35 - Task 11: Integration test for parseTaskInput + useProjectAliases
+- What was implemented:
+  - Created `src/utils/__tests__/parseTaskInput.integration.test.ts` with 10 integration tests
+  - Tests verify the full flow: project data → buildProjectAliasMap → parseTaskInput with projectAliases context
+  - Covers: explicit alias resolution, full project name resolution, auto-generated acronym resolution, fallback for unknown aliases, PRD verification example ("Fix bug @wr tomorrow !! #urgent +davis"), /tasks@alias syntax, multiple features combined, empty project list, case-insensitive lookups
+- Files created:
+  - src/utils/__tests__/parseTaskInput.integration.test.ts
+- Files changed:
+  - PRD.md (Task 11 marked complete)
+- All 60 tests pass (40 parseTaskInput unit + 10 useProjectAliases unit + 10 integration), TypeScript check passes
+- Learnings for future iterations:
+  - parseTaskInput lowercases the @name before lookup, so case-insensitive matching works automatically with the lowercase keys from buildProjectAliasMap
+  - When alias is not found, parseTaskInput falls back to the raw captured name (not lowercased) — this is intentional so unknown project references preserve original casing
+  - Phase 2 (Smart Parsing Foundation) is now fully complete — Tasks 7-11 all done
+---

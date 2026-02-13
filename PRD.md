@@ -61,7 +61,7 @@ popover: 60, toast: 70, tooltip: 80
 - [x] **Task 8:** Write tests for `parseTaskInput` — cover: plain task, all features combined (`"Fix bug @backend tomorrow !! #urgent +davis"`), multiple tags, each date variant, project alias resolution, edge cases (empty string, only modifiers, extra spaces).
 - [x] **Task 9:** Run Supabase migration: `ALTER TABLE projects ADD COLUMN aliases TEXT[];`
 - [x] **Task 10:** Create `hooks/useProjectAliases.ts` — reads projects from workspace Zustand store, builds `Record<string, projectId>` map including: lowercased project name, each alias from `project.aliases` array, auto-generated acronym (first letter of each word, lowercased, only if >1 char).
-- [ ] **Task 11:** Verify parseTaskInput + useProjectAliases work together — create a small integration test or manual verification.
+- [x] **Task 11:** Verify parseTaskInput + useProjectAliases work together — create a small integration test or manual verification.
 
 ## Phase 3: Quick Add UI (Tasks 12-15)
 
