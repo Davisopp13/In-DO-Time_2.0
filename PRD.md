@@ -67,7 +67,7 @@ popover: 60, toast: 70, tooltip: 80
 
 - [x] **Task 12:** Create `components/FAB.tsx` — fixed bottom-20 right-4, z-index `Z_INDEX.fab` (35), 56px circle, primary bg, Plus icon (lucide-react), hover:scale-110 transition, aria-label="Add task".
 - [x] **Task 13:** Create `components/QuickAddTask.tsx` — shadcn Dialog. Contains: autofocus text input (placeholder "What needs to be done?"), syntax hint text below. Live parsing preview panel (visible when input non-empty): shows parsed title, Badge components for project (Folder icon), due_date (Calendar icon + formatted date), priority (Flag icon, destructive variant if high), tags (outline badges with #), assignee (User icon). Form submit creates task via existing creation logic, clears input, closes dialog.
-- [ ] **Task 14:** Add global keyboard shortcut — `Cmd+K` / `Ctrl+K` opens QuickAddTask dialog. Use useEffect with keydown listener. Prevent default browser behavior.
+- [x] **Task 14:** Add global keyboard shortcut — `Cmd+K` / `Ctrl+K` opens QuickAddTask dialog. Use useEffect with keydown listener. Prevent default browser behavior.
 - [ ] **Task 15:** Wire FAB into main layout — renders on all authenticated pages, click opens QuickAddTask. Test on mobile: FAB doesn't overlap bottom nav, dialog input isn't obscured by keyboard.
 
 ## Phase 4: Sync System (Tasks 16-23)

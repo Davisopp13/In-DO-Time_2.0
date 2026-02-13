@@ -991,3 +991,18 @@
   - Date formatting: diff-based smart labels (Today/Tomorrow/weekday name/Mon DD)
   - The submit button is disabled when parsed.title is empty (all input was modifiers)
 ---
+
+## Iteration 38 - Task 14: Global keyboard shortcut (already implemented)
+- What was implemented:
+  - Verified Cmd+K / Ctrl+K shortcut already exists in AppShell.tsx (lines 50-60)
+  - useEffect with keydown listener checks (e.metaKey || e.ctrlKey) && e.key === "k"
+  - e.preventDefault() prevents default browser behavior
+  - Calls openQuickAdd() which fetches projects then opens QuickAddTask dialog
+  - No code changes needed — just marked task complete
+- Files changed:
+  - PRD.md (Task 14 marked complete)
+- All 60 tests pass, TypeScript check passes
+- Learnings for future iterations:
+  - Many Phase 3 tasks were already implemented in prior iterations but not tracked in PRD.md
+  - Task 15 (wire FAB into layout) is also already done — AppShell has FAB + QuickAddTask wired
+---
