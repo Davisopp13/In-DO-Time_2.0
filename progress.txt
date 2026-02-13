@@ -907,3 +907,28 @@
   - The aliases field is optional in Insert/Update since existing projects won't have aliases set
   - Task 10 (useProjectAliases hook) will consume `project.aliases` to build the alias map
 ---
+
+## Iteration 34 - Task 10: Create useProjectAliases hook
+- What was implemented:
+  - Created `src/hooks/useProjectAliases.ts` with `buildProjectAliasMap` pure function and `useProjectAliases` hook
+  - `buildProjectAliasMap(projects)` builds a `Record<string, string>` (alias → project ID) map with 3 sources per project:
+    1. Lowercased full project name (e.g., "web redesign" → id)
+    2. Each alias from `project.aliases` array (lowercased)
+    3. Auto-generated acronym from first letter of each word (lowercased, only if >1 char)
+  - Explicit aliases take priority over auto-generated acronyms (won't overwrite)
+  - `useProjectAliases(projects)` wraps in useMemo for memoized recomputation
+  - Created comprehensive test suite: `src/hooks/__tests__/useProjectAliases.test.ts` with 10 tests
+  - Fixed Node 24 + vitest compatibility issue: `npm install picomatch@latest` resolved tinyglobby crash
+- Files created:
+  - src/hooks/useProjectAliases.ts
+  - src/hooks/__tests__/useProjectAliases.test.ts
+- Files changed:
+  - PRD.md (Task 10 marked complete)
+- All 50 tests pass (40 parseTaskInput + 10 useProjectAliases), TypeScript check passes
+- Learnings for future iterations:
+  - Codebase uses React Context API (not Zustand) for workspace state — PRD references Zustand but it's not installed
+  - Projects are server-fetched and passed as props — the hook accepts a projects array param rather than reading from a store
+  - `buildProjectAliasMap` is exported separately (pure function) for easy testing without React hooks
+  - Node 24 + vitest 4.0.18 has tinyglobby/picomatch compatibility issue — fixed by installing picomatch@latest at top level
+  - picomatch added to package.json dependencies (hoisted version resolves the nested tinyglobby dep issue)
+---
