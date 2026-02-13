@@ -865,3 +865,26 @@
   - MM/DD date pattern checks validity (1-12 month, 1-31 day) and rolls to next year if already past
   - Project alias lookup is case-insensitive (lowercased before lookup)
 ---
+
+## Iteration 32 - Task 8: Write tests for parseTaskInput
+- What was implemented:
+  - Installed Vitest as dev dependency (vitest@4.0.18)
+  - Created vitest.config.ts with @/* path alias matching tsconfig
+  - Added "test" and "test:watch" scripts to package.json
+  - Created src/utils/__tests__/parseTaskInput.test.ts with 40 comprehensive tests
+  - Test categories: plain task (2), all features combined (2), project parsing (5), tags (3), date variants (10), priority (9), assignee (2), edge cases (7)
+- Files created:
+  - vitest.config.ts
+  - src/utils/__tests__/parseTaskInput.test.ts
+- Files changed:
+  - package.json (added vitest devDep, test/test:watch scripts)
+  - PRD.md (Task 8 marked complete)
+- All 40 tests pass, build passes cleanly
+- Learnings for future iterations:
+  - Vitest works out of the box with TypeScript — no ts-node or additional config needed
+  - vitest.config.ts needs the resolve.alias for @/* to match tsconfig paths
+  - Date-dependent tests use helper functions (daysFromNow, nextWeekday, today) rather than hardcoded dates — prevents flaky tests
+  - The "tomorrow" parsing in the all-features-combined test covers the PRD verification case verbatim
+  - The parser correctly handles "today tomorrow" — first date wins, second is consumed by its own regex
+  - Test runner: `npm run test` (vitest run) for CI, `npm run test:watch` for development
+---
