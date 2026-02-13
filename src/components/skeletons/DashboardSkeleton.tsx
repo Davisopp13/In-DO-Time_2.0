@@ -16,7 +16,7 @@ export default function DashboardSkeleton() {
           <div className="glass p-4 rounded-2xl border border-[var(--border)]">
             <div className="flex flex-col sm:flex-row items-center gap-6">
               <Skeleton className="w-[100px] h-[100px] rounded-full flex-shrink-0" />
-              <div className="grid grid-cols-2 gap-3 flex-1 w-full">
+              <div className="grid grid-cols-2 gap-5 flex-1 w-full">
                 {[...Array(4)].map((_, i) => (
                   <Skeleton key={i} className="h-20 w-full rounded-xl" />
                 ))}

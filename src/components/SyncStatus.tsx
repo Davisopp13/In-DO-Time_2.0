@@ -59,7 +59,7 @@ export default React.memo(function SyncStatus({
     <button
       onClick={onManualSync}
       disabled={status === "syncing"}
-      className="relative flex items-center gap-1.5 px-3 py-2 rounded-full text-[10px] font-medium transition-all hover:bg-[var(--surface-hover)] min-h-[44px]"
+      className="relative flex items-center gap-1.5 px-3 py-2 rounded-full text-[10px] font-medium transition-all duration-150 hover:bg-[var(--surface-hover)] min-h-[44px]"
       title={
         lastSyncedAt
           ? `Last synced ${formatTimeAgo(lastSyncedAt)}`

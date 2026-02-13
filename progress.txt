@@ -1242,3 +1242,26 @@
   - `title` attribute is NOT sufficient for screen readers — `aria-label` is required for icon-only buttons
   - Only Task 30 remains in the entire PRD
 ---
+
+## Iteration 48 - Task 30: Stat card spacing, shadow consistency, visual polish
+- What was implemented:
+  - Increased stat card grid gap from `gap-4` (16px) to `gap-5` (20px) in StatsRow.tsx
+  - Updated DashboardSkeleton.tsx stat card grid gap from `gap-3` (12px) to `gap-5` (20px) to match real component
+  - Shadows already `shadow-md` on stat cards (no `shadow-sm` found anywhere in codebase) — no shadow changes needed
+  - Fixed QuickAddTask.tsx close button touch target from 32px to 44px minimum (was `w-8 h-8`, now `min-w-[44px] min-h-[44px]`)
+  - Added `duration-150` to SyncStatus.tsx button transition (was missing explicit duration)
+  - Added `transition-colors duration-150` to QuickAddTask close button for hover effect consistency
+- Files changed:
+  - src/components/dashboard/StatsRow.tsx (gap-4 → gap-5)
+  - src/components/skeletons/DashboardSkeleton.tsx (gap-3 → gap-5)
+  - src/components/QuickAddTask.tsx (close button touch target + transition)
+  - src/components/SyncStatus.tsx (added duration-150)
+  - PRD.md (Task 30 marked complete — ALL TASKS COMPLETE)
+- All 60 tests pass, TypeScript check passes
+- Learnings for future iterations:
+  - No `shadow-sm` existed in the codebase — stat cards already had `shadow-md` from prior iterations
+  - The PRD's "shadow-sm to shadow-md upgrade" was a no-op since the original implementation already used shadow-md
+  - Tailwind gap-5 = 1.25rem = 20px — the 8px spacing grid maps to: gap-2(8), gap-3(12), gap-4(16), gap-5(20), gap-6(24)
+  - Modal entrance/exit animations (200-300ms) are intentionally longer than hover transitions (150ms) — PRD's 150ms standard applies to hover effects only
+  - ALL 30 TASKS IN THE PRD ARE NOW COMPLETE
+---

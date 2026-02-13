@@ -53,7 +53,7 @@ export default React.memo(function StatsRow({
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 flex-1">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-5 flex-1">
         {statCards.map(({ key, label, icon: Icon, color }) => (
           <div
             key={key}

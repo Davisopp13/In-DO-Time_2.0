@@ -226,7 +226,7 @@ export default function QuickAddTask({
             </h2>
             <button
               onClick={onClose}
-              className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[var(--surface-hover)] text-[var(--text-muted)]"
+              className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full hover:bg-[var(--surface-hover)] text-[var(--text-muted)] transition-colors duration-150"
               aria-label="Close"
             >
               <X size={18} />
