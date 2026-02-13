@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { Cloud, CloudOff, RefreshCw, AlertTriangle } from "lucide-react";
 import type { SyncStatus as SyncStatusType } from "@/hooks/useSync";
 
@@ -45,7 +46,7 @@ function formatTimeAgo(date: Date): string {
   return `${Math.floor(minutes / 60)}h ago`;
 }
 
-export default function SyncStatus({
+export default React.memo(function SyncStatus({
   status,
   lastSyncedAt,
   onManualSync,
@@ -83,4 +84,4 @@ export default function SyncStatus({
       )}
     </button>
   );
-}
+});

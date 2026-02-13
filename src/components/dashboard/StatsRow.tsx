@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useMemo } from "react";
 import { FolderOpen, CalendarClock, AlertTriangle, Clock } from "lucide-react";
 import ProgressRing from "./ProgressRing";
 
@@ -19,7 +20,7 @@ const statCards = [
   { key: "hours", label: "Hours Today", icon: Clock, color: "var(--timer-active)" },
 ] as const;
 
-export default function StatsRow({
+export default React.memo(function StatsRow({
   tasksDoneToday,
   totalTasksToday,
   activeProjects,
@@ -27,12 +28,12 @@ export default function StatsRow({
   overdue,
   hoursToday,
 }: StatsRowProps) {
-  const statValues: Record<string, string | number> = {
+  const statValues = useMemo<Record<string, string | number>>(() => ({
     projects: activeProjects,
     due: dueToday,
     overdue: overdue,
     hours: hoursToday.toFixed(1),
-  };
+  }), [activeProjects, dueToday, overdue, hoursToday]);
 
   return (
     <div className="flex flex-col sm:flex-row gap-5 items-stretch">
@@ -76,4 +77,4 @@ export default function StatsRow({
       </div>
     </div>
   );
-}
+});

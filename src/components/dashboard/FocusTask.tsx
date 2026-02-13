@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { Target } from "lucide-react";
 import type { TaskWithProject } from "@/actions/tasks";
 
@@ -21,7 +22,7 @@ const priorityColors: Record<string, string> = {
   p4: "#94a3b8",
 };
 
-export default function FocusTask({ task }: FocusTaskProps) {
+export default React.memo(function FocusTask({ task }: FocusTaskProps) {
   if (!task) {
     return (
       <div
@@ -119,4 +120,4 @@ export default function FocusTask({ task }: FocusTaskProps) {
       </div>
     </div>
   );
-}
+});

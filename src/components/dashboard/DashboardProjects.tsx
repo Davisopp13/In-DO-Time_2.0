@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useMemo } from "react";
 import Link from "next/link";
 import type { ProjectWithClient } from "@/actions/projects";
 import type { TaskWithProject } from "@/actions/tasks";
@@ -9,17 +10,20 @@ interface DashboardProjectsProps {
   tasks: TaskWithProject[];
 }
 
-export default function DashboardProjects({ projects, tasks }: DashboardProjectsProps) {
-  // Compute task counts per project
-  const taskCountsByProject: Record<string, { total: number; done: number }> = {};
-  for (const t of tasks) {
-    if (!t.project_id) continue;
-    if (!taskCountsByProject[t.project_id]) {
-      taskCountsByProject[t.project_id] = { total: 0, done: 0 };
+export default React.memo(function DashboardProjects({ projects, tasks }: DashboardProjectsProps) {
+  // Compute task counts per project (memoized)
+  const taskCountsByProject = useMemo(() => {
+    const counts: Record<string, { total: number; done: number }> = {};
+    for (const t of tasks) {
+      if (!t.project_id) continue;
+      if (!counts[t.project_id]) {
+        counts[t.project_id] = { total: 0, done: 0 };
+      }
+      counts[t.project_id].total++;
+      if (t.status === "done") counts[t.project_id].done++;
     }
-    taskCountsByProject[t.project_id].total++;
-    if (t.status === "done") taskCountsByProject[t.project_id].done++;
-  }
+    return counts;
+  }, [tasks]);
 
   return (
     <div
@@ -115,4 +119,4 @@ export default function DashboardProjects({ projects, tasks }: DashboardProjects
       )}
     </div>
   );
-}
+});

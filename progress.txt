@@ -1064,3 +1064,26 @@
   - Phase 5 (Performance & Accessibility, Tasks 24-30) is next
   - The `next build` fails due to Node.js 24 + Next.js 14 compatibility — pre-existing issue, not related to code changes
 ---
+
+## Iteration 42 - Task 24: React.memo and useMemo for display components
+- What was implemented:
+  - Wrapped 5 pure display components in `React.memo`: StatsRow, FocusTask, DashboardJournal, DashboardProjects, SyncStatus
+  - Added `useMemo` for `statValues` in StatsRow (previously recalculated on every render)
+  - Added `useMemo` for `taskCountsByProject` in DashboardProjects (O(n) computation now memoized on `tasks` array ref)
+  - Verified DashboardContent already has useMemo for all stat calculations (computeDashboardStats, getFocusTask, todaysJournal, todaysTasks) — no changes needed there
+  - Skipped ProgressRing (internal animation state) and DashboardGreeting (workspace context + hydration state) — memo would not help these
+- Files changed:
+  - src/components/dashboard/StatsRow.tsx (React.memo wrapper, useMemo for statValues)
+  - src/components/dashboard/FocusTask.tsx (React.memo wrapper)
+  - src/components/dashboard/DashboardJournal.tsx (React.memo wrapper)
+  - src/components/dashboard/DashboardProjects.tsx (React.memo wrapper, useMemo for taskCountsByProject)
+  - src/components/SyncStatus.tsx (React.memo wrapper)
+  - PRD.md (Task 24 marked complete)
+- All 60 tests pass, TypeScript check passes
+- Learnings for future iterations:
+  - DashboardContent already uses useMemo extensively — the stat computation was already optimized from prior iterations
+  - React.memo pattern: `export default React.memo(function Name(...) { ... });` — wraps the named function expression
+  - Components with internal useState/useEffect (ProgressRing, DashboardGreeting) or that fetch data (ActiveTimersStrip, DashboardTaskList) are not good memo candidates
+  - The `statValues` object in StatsRow was recreated on every render — now memoized on the 4 stat props
+  - Phase 5 (Performance & Accessibility) is now started — Tasks 25-30 remain
+---

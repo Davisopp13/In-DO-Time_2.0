@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import Link from "next/link";
 import { BookOpen, Plus } from "lucide-react";
 import type { NoteWithProject } from "@/actions/notes";
@@ -18,7 +19,7 @@ interface DashboardJournalProps {
   todaysJournal: NoteWithProject | null;
 }
 
-export default function DashboardJournal({ todaysJournal }: DashboardJournalProps) {
+export default React.memo(function DashboardJournal({ todaysJournal }: DashboardJournalProps) {
   return (
     <div
       className="glass p-5 flex flex-col h-full"
@@ -85,4 +86,4 @@ export default function DashboardJournal({ todaysJournal }: DashboardJournalProp
       )}
     </div>
   );
-}
+});
