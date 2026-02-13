@@ -6,6 +6,7 @@ import { useWorkspace } from "@/lib/workspace";
 import { ChevronDown, Ship, Code, User, Bot, Plus } from "lucide-react";
 import Sheet from "@/components/ui/Sheet";
 import { Z_INDEX } from "@/lib/constants";
+import { useIsMobile } from "@/hooks/useMediaQuery";
 
 const iconMap: Record<string, any> = {
     Ship,
@@ -13,18 +14,6 @@ const iconMap: Record<string, any> = {
     User,
     Bot,
 };
-
-function useIsMobile() {
-    const [isMobile, setIsMobile] = useState(false);
-    useEffect(() => {
-        const mql = window.matchMedia("(max-width: 767px)");
-        setIsMobile(mql.matches);
-        const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-        mql.addEventListener("change", handler);
-        return () => mql.removeEventListener("change", handler);
-    }, []);
-    return isMobile;
-}
 
 export default function WorkspaceSelector() {
     const { workspaces, currentWorkspace, setCurrentWorkspace } = useWorkspace();

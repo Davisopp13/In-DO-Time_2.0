@@ -822,3 +822,25 @@
   - Loading.tsx in App Router automatically handles suspense boundaries for async server components
   - Error.tsx must be a client component to handle retries and catch errors
   - Not-found.tsx provides a polished 404 experience instead of default Next.js page
+
+---
+
+## Iteration 30 - Phase 1 Tasks 1-6 (verification + useMediaQuery)
+- What was implemented:
+  - Verified Tasks 1, 3, 4, 5, 6 were already implemented by prior iterations but not marked in PRD.md
+  - Created `hooks/useMediaQuery.ts` — reusable hook accepting any CSS media query string, returns boolean
+  - Exports `useMediaQuery(query)` and convenience `useIsMobile()` (≤767px)
+  - Handles SSR by returning false initially (useState(false)), subscribes to matchMedia change events
+  - Refactored WorkspaceSelector to import `useIsMobile` from the shared hook instead of inline definition
+- Files created:
+  - src/hooks/useMediaQuery.ts
+- Files changed:
+  - src/components/layout/WorkspaceSelector.tsx (removed inline useIsMobile, imported from hooks)
+  - PRD.md (Tasks 1-6 all marked [x])
+- Build passes cleanly — no TypeScript errors
+- Learnings for future iterations:
+  - Many Phase 1 tasks were already implemented during prior iterations (workspace, sync, etc.) but never marked in PRD.md
+  - The z-index hierarchy in lib/constants.ts is already used consistently across Sidebar, TopBar, MobileNav, FAB, Sheet, Toaster, QuickAddTask, WorkspaceSelector
+  - Only hardcoded z-index remaining is z-index: 0 in globals.css for background glow pseudo-element — acceptable since CSS can't import JS constants
+  - Safe area CSS variables and viewport-fit: cover were added during iteration 28 (mobile responsive polish)
+  - WorkspaceSelector already had Sheet for mobile + portal dropdown for desktop from a prior iteration
