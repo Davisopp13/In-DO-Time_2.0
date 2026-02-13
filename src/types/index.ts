@@ -29,6 +29,7 @@ export interface Project {
   status: "active" | "paused" | "completed";
   color: string;
   hourly_rate_override: number | null;
+  aliases: string[] | null;
   sort_order: number;
   created_at: string;
   updated_at: string;

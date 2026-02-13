@@ -888,3 +888,22 @@
   - The parser correctly handles "today tomorrow" — first date wins, second is consumed by its own regex
   - Test runner: `npm run test` (vitest run) for CI, `npm run test:watch` for development
 ---
+
+## Iteration 33 - Task 9: Supabase migration for project aliases column
+- What was implemented:
+  - Created SQL migration `supabase/migrations/004_project_aliases.sql` — `ALTER TABLE projects ADD COLUMN aliases TEXT[];`
+  - Updated `src/types/supabase.ts` — added `aliases: string[] | null` to Row, Insert (optional), and Update (optional) for projects table
+  - Updated `src/types/index.ts` — added `aliases: string[] | null` to the Project interface
+- Files created:
+  - supabase/migrations/004_project_aliases.sql
+- Files changed:
+  - src/types/supabase.ts (added aliases field to projects Row/Insert/Update)
+  - src/types/index.ts (added aliases field to Project interface)
+  - PRD.md (Task 9 marked complete)
+- All 40 tests pass, build passes cleanly
+- Learnings for future iterations:
+  - Migration must be run against Supabase dashboard or via `supabase db push` — the file is ready but execution is manual
+  - `TEXT[]` in Postgres maps to `string[] | null` in TypeScript (nullable since column has no NOT NULL constraint)
+  - The aliases field is optional in Insert/Update since existing projects won't have aliases set
+  - Task 10 (useProjectAliases hook) will consume `project.aliases` to build the alias map
+---
